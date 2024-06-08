@@ -17,9 +17,6 @@ namespace {
     std::string path_str;
     if (path_lst_base != nullptr) {
       path_str = path_lst_base;
-    } else if (path_tracklooperdir != nullptr) {
-      path_str = path_tracklooperdir;
-      path_str += "/../";
     } else {
       std::stringstream search_path(std::getenv("CMSSW_SEARCH_PATH"));
       std::string path;
@@ -29,7 +26,12 @@ namespace {
           break;
         }
       }
-      path_str += "/RecoTracker/LSTCore";
+      if (path_str.empty()) {
+        path_str = path_tracklooperdir;
+        path_str += "/..";
+      } else {
+        path_str += "/RecoTracker/LSTCore";
+      }
     }
     return path_str;
   }
