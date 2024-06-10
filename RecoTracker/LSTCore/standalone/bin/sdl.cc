@@ -50,6 +50,7 @@ int main(int argc, char **argv) {
       cxxopts::value<std::string>()->default_value("trackingNtuple/tree"))(
       "o,output", "Output file name", cxxopts::value<std::string>())(
       "N,nmatch", "N match for MTV-like matching", cxxopts::value<int>()->default_value("9"))(
+      "p,ptCut", "Min pT Cut In GeV, Default is 0.8.", cxxopts::value<float>()->default_value("0.8"))(
       "n,nevents", "N events to loop over", cxxopts::value<int>()->default_value("-1"))(
       "x,event_index", "specific event index to process", cxxopts::value<int>()->default_value("-1"))(
       "g,pdg_id", "The simhit pdgId match option (default = 0)", cxxopts::value<int>()->default_value("0"))(
@@ -140,6 +141,10 @@ int main(int argc, char **argv) {
       ana.output_tfile = new TFile("debug.root", "recreate");
     }
   }
+
+  //_______________________________________________________________________________
+  // --ptCut
+  ana.ptCut = result["ptCut"].as<float>();
 
   //_______________________________________________________________________________
   // --nmatch
@@ -257,6 +262,7 @@ int main(int argc, char **argv) {
   std::cout << " ana.mode: " << ana.mode << std::endl;
   std::cout << " ana.streams: " << ana.streams << std::endl;
   std::cout << " ana.verbose: " << ana.verbose << std::endl;
+  std::cout << " ana.ptCut: " << ana.ptCut << std::endl;
   std::cout << " ana.nmatch_threshold: " << ana.nmatch_threshold << std::endl;
   std::cout << "=========================================================" << std::endl;
 
@@ -373,7 +379,7 @@ void run_sdl() {
   full_timer.Start();
   std::vector<SDL::Event<SDL::Acc> *> events;
   for (int s = 0; s < ana.streams; s++) {
-    SDL::Event<SDL::Acc> *event = new SDL::Event<SDL::Acc>(ana.verbose >= 2, queues[s], deviceESData.get());
+    SDL::Event<SDL::Acc> *event = new SDL::Event<SDL::Acc>(ana.verbose >= 2, ana.ptCut, queues[s], deviceESData.get());
     events.push_back(event);
   }
   float timeForEventCreation = full_timer.RealTime() * 1000;

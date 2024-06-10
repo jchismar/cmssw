@@ -1,7 +1,8 @@
 #include "Event.h"
 
-void SDL::Event<SDL::Acc>::init(bool verbose) {
+void SDL::Event<SDL::Acc>::init(bool verbose, float pt_cut) {
   addObjects = verbose;
+  ptCut = pt_cut;
   hitsInGPU = nullptr;
   mdsInGPU = nullptr;
   segmentsInGPU = nullptr;
@@ -440,7 +441,8 @@ void SDL::Event<SDL::Acc>::createMiniDoublets() {
                                                                          *modulesBuffers_->data(),
                                                                          *hitsInGPU,
                                                                          *mdsInGPU,
-                                                                         *rangesInGPU));
+                                                                         *rangesInGPU,
+                                                                         ptCut));
 
   alpaka::enqueue(queue, createMiniDoubletsInGPUv2Task);
 
@@ -485,7 +487,8 @@ void SDL::Event<SDL::Acc>::createSegmentsWithModuleMap() {
                                                                      *modulesBuffers_->data(),
                                                                      *mdsInGPU,
                                                                      *segmentsInGPU,
-                                                                     *rangesInGPU));
+                                                                     *rangesInGPU,
+                                                                     ptCut));
 
   alpaka::enqueue(queue, createSegmentsInGPUv2Task);
 
@@ -593,7 +596,8 @@ void SDL::Event<SDL::Acc>::createTriplets() {
                                                                      *tripletsInGPU,
                                                                      *rangesInGPU,
                                                                      alpaka::getPtrNative(index_gpu_buf),
-                                                                     nonZeroModules));
+                                                                     nonZeroModules,
+                                                                     ptCut));
 
   alpaka::enqueue(queue, createTripletsInGPUv2Task);
 
@@ -871,7 +875,8 @@ void SDL::Event<SDL::Acc>::createPixelTriplets() {
                                     *pixelTripletsInGPU,
                                     alpaka::getPtrNative(connectedPixelSize_dev_buf),
                                     alpaka::getPtrNative(connectedPixelIndex_dev_buf),
-                                    nInnerSegments));
+                                    nInnerSegments,
+                                    ptCut));
 
   alpaka::enqueue(queue, createPixelTripletsInGPUFromMapv2Task);
   alpaka::wait(queue);
@@ -950,7 +955,8 @@ void SDL::Event<SDL::Acc>::createQuintuplets() {
                                                                         *tripletsInGPU,
                                                                         *quintupletsInGPU,
                                                                         *rangesInGPU,
-                                                                        nEligibleT5Modules));
+                                                                        nEligibleT5Modules,
+                                                                        ptCut));
 
   alpaka::enqueue(queue, createQuintupletsInGPUv2Task);
 
@@ -1101,7 +1107,8 @@ void SDL::Event<SDL::Acc>::createPixelQuintuplets() {
                                     alpaka::getPtrNative(connectedPixelSize_dev_buf),
                                     alpaka::getPtrNative(connectedPixelIndex_dev_buf),
                                     nInnerSegments,
-                                    *rangesInGPU));
+                                    *rangesInGPU,
+                                    ptCut));
 
   alpaka::enqueue(queue, createPixelQuintupletsInGPUFromMapv2Task);
 
