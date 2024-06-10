@@ -31,7 +31,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
               consumes<LSTPhase2OTHitsInput>(config.getParameter<edm::InputTag>("phase2OTHitsInput"))},
           lstESToken_{esConsumes()},
           verbose_(config.getParameter<int>("verbose")),
-          ptCut_(config.getParameter<bool>("ptCut")),
+          ptCut_(config.getParameter<float>("ptCut")),
           lstOutputToken_{produces()} {}
 
     void acquire(device::Event const& event, device::EventSetup const& setup) override {
