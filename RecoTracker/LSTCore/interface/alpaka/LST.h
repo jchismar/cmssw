@@ -48,7 +48,9 @@ namespace SDL {
              const std::vector<unsigned int> ph2_detId,
              const std::vector<float> ph2_x,
              const std::vector<float> ph2_y,
-             const std::vector<float> ph2_z);
+             const std::vector<float> ph2_z,
+             bool no_pls_dupclean,
+             bool tc_pls_triplets);
     std::vector<std::vector<unsigned int>> hits() { return out_tc_hitIdxs_; }
     std::vector<unsigned int> len() { return out_tc_len_; }
     std::vector<int> seedIdx() { return out_tc_seedIdx_; }
