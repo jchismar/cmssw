@@ -147,6 +147,12 @@ int main(int argc, char **argv) {
   // --ptCut
   ana.ptCut = result["ptCut"].as<float>();
 
+  // Throw an error if pT cut is below 0.6 GeV
+  if (ana.ptCut < 0.6) {
+    std::cout << "ERROR: Minimum pT cut should not be below 0.6 GeV. You provided: " << ana.ptCut << " GeV" << std::endl;
+    exit(1);
+  }
+
   //_______________________________________________________________________________
   // --nmatch
   ana.nmatch_threshold = result["nmatch"].as<int>();
