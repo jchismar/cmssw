@@ -22,7 +22,6 @@ if [ -z ${CMSSW_SEARCH_PATH+x} ]; then
   eval `scramv1 runtime -sh`
 else
   cd $CMSSW_BASE/src
-  eval `scramv1 runtime -sh`
 fi
 
 # Export paths to libraries we need
