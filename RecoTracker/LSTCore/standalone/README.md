@@ -201,13 +201,3 @@ Using the first setup option above, it is prefered to run the checks provided by
 ```
 scram b -j 12 code-checks >& c.log && scram b -j 12 code-format >& f.log
 ```
-
-In any case, the makefile in the `standalone` directory also includes phony targets to run `clang-format` and `clang-tidy` on the code using the formatting and checks used in CMSSW. The following are the available commands.
-
-- `make format`
-  Formats the code in the `SDL` directory using `clang-format` following the rules specified in `.clang-format`.
-- `make check`
-  Runs `clang-tidy` on the code in the `SDL` directory to performs the checks specified in `.clang-tidy`.
-- `make check-fix`
-  Same as `make check`, but fixes the issues that it knows how to fix.
- 
