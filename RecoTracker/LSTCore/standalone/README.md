@@ -53,6 +53,7 @@ source setup.sh # if on UCSD or Cornell
 source setup_hpg.sh # if on Florida
 ```
 
+<!---
 #### Running LST in a CVMFS-less setup
 
 The setup scripts included in this repository assume that the [CernVM File System (CVMFS)](https://cernvm.cern.ch/fs/) is installed. This provides a convenient way to fetch the required dependencies, but it is not necessary to run LST in standalone mode. Here, we briefly describe how to build and run it when CVMFS is not available.
@@ -86,6 +87,7 @@ source $PWD/code/rooutil/thisrooutil.sh
 
 # After this, you can compile and run LST as usual, as described below.
 ```
+-->
 
 ## Running the code
 
