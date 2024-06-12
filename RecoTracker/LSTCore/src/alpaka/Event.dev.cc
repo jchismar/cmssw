@@ -1,8 +1,7 @@
 #include "Event.h"
 
-void SDL::Event<SDL::Acc>::init(bool verbose, float pt_cut) {
+void SDL::Event<SDL::Acc>::init(bool verbose) {
   addObjects = verbose;
-  ptCut = pt_cut;
   hitsInGPU = nullptr;
   mdsInGPU = nullptr;
   segmentsInGPU = nullptr;

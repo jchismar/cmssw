@@ -313,7 +313,7 @@ namespace SDL {
                                                                 unsigned int& innerSegmentIndex,
                                                                 float& betaIn,
                                                                 float& betaInCut,
-                                                                float& ptCut) {
+                                                                const float& ptCut) {
     bool pass = true;
     bool isPSIn = (modulesInGPU.moduleType[innerInnerLowerModuleIndex] == SDL::PS);
     bool isPSOut = (modulesInGPU.moduleType[outerOuterLowerModuleIndex] == SDL::PS);
@@ -350,7 +350,7 @@ namespace SDL {
     float drt_InSeg = rtMid - rtIn;
     float dz_InSeg = zMid - zIn;
     float dr3_InSeg =
-        alpaka::math::sqrt(acc, rtMid * rtMid + zMid * zMid) - alpaka::math::sqrt(acc, rtIn * rtIn + zIn * zIn);
+        alpaka::math::sqrt(acc, rtMid * rtMid + zMid * zMid) - alpaka::math::sqrt(acc, rtIn * rtIn + zIn + zIn);
 
     float coshEta = dr3_InSeg / drt_InSeg;
     float dzErr = (zpitchIn + zpitchOut) * (zpitchIn + zpitchOut) * 2.f;
@@ -418,7 +418,7 @@ namespace SDL {
                                                                 unsigned int& outerSegmentIndex,
                                                                 float& betaIn,
                                                                 float& betaInCut,
-                                                                float& ptCut) {
+                                                                const float& ptCut) {
     bool pass = true;
 
     bool isPSIn = (modulesInGPU.moduleType[innerInnerLowerModuleIndex] == SDL::PS);
@@ -545,7 +545,7 @@ namespace SDL {
                                                                 unsigned int& outerSegmentIndex,
                                                                 float& betaIn,
                                                                 float& betaInCut,
-                                                                float& ptCut) {
+                                                                const float& ptCut) {
     bool pass = true;
 
     float rtIn = mdsInGPU.anchorRt[firstMDIndex];
@@ -674,7 +674,7 @@ namespace SDL {
                                                              unsigned int& outerSegmentIndex,
                                                              float& betaIn,
                                                              float& betaInCut,
-                                                             float& ptCut) {
+                                                             const float& ptCut) {
     short innerInnerLowerModuleSubdet = modulesInGPU.subdets[innerInnerLowerModuleIndex];
     short middleLowerModuleSubdet = modulesInGPU.subdets[middleLowerModuleIndex];
     short outerOuterLowerModuleSubdet = modulesInGPU.subdets[outerOuterLowerModuleIndex];
@@ -824,7 +824,7 @@ namespace SDL {
                                                                    float& zHiPointed,
                                                                    float& sdlCut,
                                                                    float& betaInCut,
-                                                                   float& ptCut) {
+                                                                   const float& ptCut) {
     bool pass = true;
     //this cut reduces the number of candidates by a factor of 4, i.e., 3 out of 4 warps can end right here!
     if (segmentsInGPU.mdIndices[2 * innerSegmentIndex + 1] != segmentsInGPU.mdIndices[2 * outerSegmentIndex])
@@ -888,7 +888,7 @@ namespace SDL {
                                   struct SDL::objectRanges rangesInGPU,
                                   uint16_t* index_gpu,
                                   uint16_t nonZeroModules,
-                                  float ptCut) const {
+                                  const float ptCut) const {
       auto const globalThreadIdx = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
       auto const gridThreadExtent = alpaka::getWorkDiv<alpaka::Grid, alpaka::Threads>(acc);
 

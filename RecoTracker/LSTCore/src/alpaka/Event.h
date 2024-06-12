@@ -31,10 +31,10 @@ namespace SDL {
   class Event<SDL::Acc> {
   private:
     QueueAcc queue;
+    const float ptCut;
     Dev devAcc;
     DevHost devHost;
     bool addObjects;
-    float ptCut;
 
     std::array<unsigned int, 6> n_hits_by_layer_barrel_;
     std::array<unsigned int, 5> n_hits_by_layer_endcap_;
@@ -82,7 +82,7 @@ namespace SDL {
     pixelTripletsBuffer<alpaka::DevCpu>* pixelTripletsInCPU;
     pixelQuintupletsBuffer<alpaka::DevCpu>* pixelQuintupletsInCPU;
 
-    void init(bool verbose, float pt_cut);
+    void init(bool verbose);
 
     int* superbinCPU;
     int8_t* pixelTypeCPU;
@@ -98,8 +98,9 @@ namespace SDL {
   public:
     // Constructor used for CMSSW integration. Uses an external queue.
     template <typename TQueue>
-    Event(bool verbose, float pt_cut, TQueue const& q, const LSTESDeviceData<Dev>* deviceESData)
+    Event(bool verbose, const float pt_cut, TQueue const& q, const LSTESDeviceData<Dev>* deviceESData)
         : queue(q),
+          ptCut(pt_cut),
           devAcc(alpaka::getDev(q)),
           devHost(cms::alpakatools::host()),
           nModules_(deviceESData->nModules),
@@ -108,7 +109,7 @@ namespace SDL {
           modulesBuffers_(deviceESData->modulesBuffers),
           pixelMapping_(deviceESData->pixelMapping),
           endcapGeometry_(deviceESData->endcapGeometry) {
-      init(verbose, pt_cut);
+      init(verbose);
     }
     void resetEvent();
 

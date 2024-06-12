@@ -50,7 +50,7 @@ int main(int argc, char **argv) {
       cxxopts::value<std::string>()->default_value("trackingNtuple/tree"))(
       "o,output", "Output file name", cxxopts::value<std::string>())(
       "N,nmatch", "N match for MTV-like matching", cxxopts::value<int>()->default_value("9"))(
-      "p,ptCut", "Min pT Cut In GeV, Default is 0.8.", cxxopts::value<float>()->default_value("0.8"))(
+      "p,ptCut", "Min pT cut In GeV", cxxopts::value<float>()->default_value("0.8"))(
       "n,nevents", "N events to loop over", cxxopts::value<int>()->default_value("-1"))(
       "x,event_index", "specific event index to process", cxxopts::value<int>()->default_value("-1"))(
       "g,pdg_id", "The simhit pdgId match option", cxxopts::value<int>()->default_value("0"))(
@@ -149,7 +149,8 @@ int main(int argc, char **argv) {
 
   // Throw an error if pT cut is below 0.6 GeV
   if (ana.ptCut < 0.6) {
-    std::cout << "ERROR: Minimum pT cut should not be below 0.6 GeV. You provided: " << ana.ptCut << " GeV" << std::endl;
+    std::cout << "ERROR: Minimum pT cut should not be below 0.6 GeV. You provided: " << ana.ptCut << " GeV"
+              << std::endl;
     exit(1);
   }
 

@@ -28,7 +28,7 @@ namespace SDL {
 
     void run(QueueAcc& queue,
              bool verbose,
-             float ptCut,
+             const float ptCut,
              const LSTESDeviceData<Dev>* deviceESData,
              const std::vector<float> see_px,
              const std::vector<float> see_py,
