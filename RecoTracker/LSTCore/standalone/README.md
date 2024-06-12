@@ -37,6 +37,15 @@ source setup.sh # if on UCSD or Cornell
 source setup_hpg.sh # if on Florida
 ```
 
+Currently, the data files for LST need to be copied manually. This is done by running:
+
+```bash
+mkdir -p $CMSSW_BASE/external/$SCRAM_ARCH/data/RecoTracker/LSTCore/
+cd $CMSSW_BASE/external/$SCRAM_ARCH/data/RecoTracker/LSTCore/
+git clone git@github.com:cms-data/RecoTracker-LSTCore.git data
+cd -
+```
+
 ### Setting up LST outside of CMSSW
 
 For this setup, dependencies are still provided from CMSSW through CVMFS (see below for an even more independent setup) but no CMSSW area is setup. This is done by running the following commands.
@@ -51,6 +60,12 @@ cd RecoTracker/LSTCore/standalone/
 # Source one of the commands below, depending on the site
 source setup.sh # if on UCSD or Cornell
 source setup_hpg.sh # if on Florida
+```
+
+Currently, the data files for LST need to be copied manually. This is done by running:
+
+```bash
+git clone git@github.com:cms-data/RecoTracker-LSTCore.git data
 ```
 
 <!---
