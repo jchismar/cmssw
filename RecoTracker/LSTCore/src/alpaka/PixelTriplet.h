@@ -760,8 +760,7 @@ namespace SDL {
     float z1 = zPix[1] / 100;
     float r1 = rtPix[1] / 100;
 
-    float Bz = SDL::magnetic_field;
-    float a = -0.299792 * Bz * charge;
+    float a = -1000/SDL::kR1GeVf * charge;
 
     for (size_t i = 0; i < 3; i++) {
       float zsi = zs[i] / 100;
@@ -781,6 +780,7 @@ namespace SDL {
         float x = x1 + Px / a * alpaka::math::sin(acc, rou * s) - Py / a * (1 - alpaka::math::cos(acc, rou * s));
         float y = y1 + Py / a * alpaka::math::sin(acc, rou * s) + Px / a * (1 - alpaka::math::cos(acc, rou * s));
         diffr = alpaka::math::abs(acc, rtsi - alpaka::math::sqrt(acc, x * x + y * y)) * 100;
+        residual = diffr;
       }
 
       if (moduleSubdet == SDL::Barrel) {
@@ -797,10 +797,9 @@ namespace SDL {
         float diffz1 = alpaka::math::abs(acc, solz1 - zsi) * 100;
         float diffz2 = alpaka::math::abs(acc, solz2 - zsi) * 100;
         diffz = alpaka::math::min(acc, diffz1, diffz2);
+        residual = diffz;
       }
-
-      residual = moduleSubdet == SDL::Barrel ? diffz : diffr;
-
+      
       //PS Modules
       if (moduleType == 0) {
         error = 0.15f;
@@ -2063,6 +2062,8 @@ namespace SDL {
                        5 * (modulesInGPU.subdets[lowerModuleIndex5] == SDL::Endcap and
                             modulesInGPU.moduleType[lowerModuleIndex5] == SDL::TwoS);
 
+    // This slides shows the cut threshold definition. The comments below in the code, e.g, "cat 10", is consistent with the region separation in the slides
+    // https://indico.cern.ch/event/1410985/contributions/5931017/attachments/2875400/5035406/helix%20approxi%20for%20pT5%20rzchi2%20new%20results%20versions.pdf
     if (layer1 == 1 and layer2 == 2 and layer3 == 3) {
       if (layer4 == 12 and layer5 == 13) {  // cat 10
         return rzChiSquared < 14.031f;
@@ -2540,10 +2541,10 @@ namespace SDL {
     uint16_t lowerModuleIndices[5] = {
         lowerModuleIndex1, lowerModuleIndex2, lowerModuleIndex3, lowerModuleIndex4, lowerModuleIndex5};
 
-    float zPix[2] = {mdsInGPU.anchorZ[pixelInnerMDIndex], mdsInGPU.anchorZ[pixelOuterMDIndex]};
     float rtPix[2] = {mdsInGPU.anchorRt[pixelInnerMDIndex], mdsInGPU.anchorRt[pixelOuterMDIndex]};
     float xPix[2] = {mdsInGPU.anchorX[pixelInnerMDIndex], mdsInGPU.anchorX[pixelOuterMDIndex]};
     float yPix[2] = {mdsInGPU.anchorY[pixelInnerMDIndex], mdsInGPU.anchorY[pixelOuterMDIndex]};
+    float zPix[2] = {mdsInGPU.anchorZ[pixelInnerMDIndex], mdsInGPU.anchorZ[pixelOuterMDIndex]};
 
     float zs[5] = {mdsInGPU.anchorZ[firstMDIndex],
                    mdsInGPU.anchorZ[secondMDIndex],
@@ -2564,9 +2565,7 @@ namespace SDL {
 
     rzChiSquared = 0;
 
-    //get the appropriate radii and centers
-    centerX = segmentsInGPU.circleCenterX[pixelSegmentArrayIndex];
-    centerY = segmentsInGPU.circleCenterY[pixelSegmentArrayIndex];
+    //get the appropriate centers
     pixelRadius = segmentsInGPU.circleRadius[pixelSegmentArrayIndex];
 
     if (pixelRadius < 5.0f * kR1GeVf) {  //only apply r-z chi2 cuts for <5GeV tracks
@@ -2606,6 +2605,10 @@ namespace SDL {
                    mdsInGPU.anchorY[thirdMDIndex],
                    mdsInGPU.anchorY[fourthMDIndex],
                    mdsInGPU.anchorY[fifthMDIndex]};
+
+    //get the appropriate centers
+    centerX = segmentsInGPU.circleCenterX[pixelSegmentArrayIndex];
+    centerY = segmentsInGPU.circleCenterY[pixelSegmentArrayIndex];
 
     float T5CenterX = quintupletsInGPU.regressionG[quintupletIndex];
     float T5CenterY = quintupletsInGPU.regressionF[quintupletIndex];
@@ -2668,6 +2671,7 @@ namespace SDL {
     float error = 0;
     float RMSE = 0;
 
+    // the pixel positions are in unit of cm, and need to be divided by 100 to be in consistent with unit mm.
     float Px = pixelSegmentPx, Py = pixelSegmentPy, Pz = pixelSegmentPz;
     int charge = pixelSegmentCharge;
     float x1 = xPix[1] / 100;
@@ -2675,8 +2679,7 @@ namespace SDL {
     float z1 = zPix[1] / 100;
     float r1 = rtPix[1] / 100;
 
-    float Bz = SDL::magnetic_field;
-    float a = -0.299792 * Bz * charge;
+    float a = -1000/SDL::kR1GeVf * charge;
 
     for (size_t i = 0; i < 5; i++) {
       float zsi = zs[i] / 100;
