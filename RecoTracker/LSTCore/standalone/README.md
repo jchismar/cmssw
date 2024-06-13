@@ -27,7 +27,7 @@ cd ${CMSSW_VERSION}/src/
 cmsenv
 git cms-init
 git remote add SegLink git@github.com:SegmentLinking/cmssw.git
-git fetch ${LST_BRANCH}
+git fetch SegLink ${LST_BRANCH}
 git checkout ${LST_BRANCH}
 git cms-addpkg RecoTracker/LST RecoTracker/LSTCore
 scram b -j 12
