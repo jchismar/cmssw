@@ -37,7 +37,7 @@ source setup.sh # if on UCSD or Cornell
 source setup_hpg.sh # if on Florida
 ```
 
-Currently, the data files for LST need to be copied manually. This is done by running:
+Currently, the data files for LST need to be copied manually (under `$CMSSW_BASE/external/$SCRAM_ARCH/data/RecoTracker/LSTCore/data/`). This is done by running:
 
 ```bash
 mkdir -p $CMSSW_BASE/external/$SCRAM_ARCH/data/RecoTracker/LSTCore/
@@ -48,7 +48,7 @@ cd -
 
 ### Setting up LST outside of CMSSW
 
-For this setup, dependencies are still provided from CMSSW through CVMFS (see below for an even more independent setup) but no CMSSW area is setup. This is done by running the following commands.
+For this setup, dependencies are still provided from CMSSW through CVMFS but no CMSSW area is setup. This is done by running the following commands.
 
 ``` bash
 LST_BRANCH=CMSSW_14_1_0_pre3_LST_X_LSTCore_realfiles # Change to the development branch
@@ -62,10 +62,12 @@ source setup.sh # if on UCSD or Cornell
 source setup_hpg.sh # if on Florida
 ```
 
-Currently, the data files for LST need to be copied manually. This is done by running:
+The data files for LST need to be copied manually (under `RecoTracker/LSTCore/data/`). This is done by running:
 
 ```bash
+cd ..
 git clone git@github.com:cms-data/RecoTracker-LSTCore.git data
+cd -
 ```
 
 <!---
@@ -91,7 +93,7 @@ export ROOT_ROOT=/cvmfs/cms.cern.ch/el8_amd64_gcc12/lcg/root/6.30.07-21947a33e64
 export CMSSW_BASE=/cvmfs/cms.cern.ch/el8_amd64_gcc12/cms/cmssw/CMSSW_14_1_0_pre3
 
 # These lines are needed to account for some extra environment variables that are exported in the setup script.
-export LD_LIBRARY_PATH=$PWD/SDL/cuda:$PWD/SDL/cpu:$PWD:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$PWD/SDL:$LD_LIBRARY_PATH
 export PATH=$PWD/bin:$PATH
 export PATH=$PWD/efficiency/bin:$PATH
 export PATH=$PWD/efficiency/python:$PATH
