@@ -45,7 +45,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
       lst_.run(event.queue(),
                verbose_,
-               ptCut_,
+               static_cast<float>(ptCut_),
                &lstESDeviceData,
                pixelSeeds.px(),
                pixelSeeds.py(),
