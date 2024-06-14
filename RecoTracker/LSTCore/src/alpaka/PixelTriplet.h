@@ -760,7 +760,7 @@ namespace SDL {
     float z1 = zPix[1] / 100;
     float r1 = rtPix[1] / 100;
 
-    float a = -1000/SDL::kR1GeVf * charge;
+    float a = -100/SDL::kR1GeVf * charge;
 
     for (size_t i = 0; i < 3; i++) {
       float zsi = zs[i] / 100;
@@ -2679,7 +2679,7 @@ namespace SDL {
     float z1 = zPix[1] / 100;
     float r1 = rtPix[1] / 100;
 
-    float a = -1000/SDL::kR1GeVf * charge;
+    float a = -100/SDL::kR1GeVf * charge;
 
     for (size_t i = 0; i < 5; i++) {
       float zsi = zs[i] / 100;
