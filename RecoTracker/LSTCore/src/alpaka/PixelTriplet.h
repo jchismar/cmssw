@@ -760,7 +760,7 @@ namespace SDL {
     float z1 = zPix[1] / 100;
     float r1 = rtPix[1] / 100;
 
-    float a = -100/SDL::kR1GeVf * charge;
+    float a = -100 / SDL::kR1GeVf * charge;
 
     for (size_t i = 0; i < 3; i++) {
       float zsi = zs[i] / 100;
@@ -799,7 +799,7 @@ namespace SDL {
         diffz = alpaka::math::min(acc, diffz1, diffz2);
         residual = diffz;
       }
-      
+
       //PS Modules
       if (moduleType == 0) {
         error = 0.15f;
@@ -2679,7 +2679,7 @@ namespace SDL {
     float z1 = zPix[1] / 100;
     float r1 = rtPix[1] / 100;
 
-    float a = -100/SDL::kR1GeVf * charge;
+    float a = -100 / SDL::kR1GeVf * charge;
 
     for (size_t i = 0; i < 5; i++) {
       float zsi = zs[i] / 100;
@@ -2735,7 +2735,7 @@ namespace SDL {
       RMSE += (residual * residual) / (error * error);
     }
 
-    RMSE = alpaka::math::sqrt(acc, 0.2f * RMSE);  //the constant doesn't really matter....
+    RMSE = alpaka::math::sqrt(acc, 0.2f * RMSE);  //Divided by the degree of freedom 5.
 
     return RMSE;
   };
