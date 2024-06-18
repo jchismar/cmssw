@@ -1,8 +1,4 @@
-#ifdef LST_IS_CMSSW_PACKAGE
 #include "RecoTracker/LSTCore/interface/alpaka/LSTESData.h"
-#else
-#include "LSTESData.h"
-#endif
 
 #include "EndcapGeometry.h"
 #include "ModuleConnectionMap.h"

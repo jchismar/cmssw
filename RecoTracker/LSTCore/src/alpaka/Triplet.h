@@ -1,13 +1,8 @@
 #ifndef Triplet_cuh
 #define Triplet_cuh
 
-#ifdef LST_IS_CMSSW_PACKAGE
 #include "RecoTracker/LSTCore/interface/alpaka/Constants.h"
 #include "RecoTracker/LSTCore/interface/alpaka/Module.h"
-#else
-#include "Constants.h"
-#include "Module.h"
-#endif
 
 #include "Segment.h"
 #include "MiniDoublet.h"
