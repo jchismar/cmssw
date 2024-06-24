@@ -1,5 +1,4 @@
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
-#include "FWCore/Utilities/interface/EDMException.h"
 
 #include "HeterogeneousCore/AlpakaCore/interface/alpaka/ESProducer.h"
 #include "HeterogeneousCore/AlpakaCore/interface/alpaka/ModuleFactory.h"

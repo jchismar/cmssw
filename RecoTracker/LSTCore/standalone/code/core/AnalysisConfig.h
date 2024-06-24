@@ -46,7 +46,7 @@ public:
   // pt binning options
   int ptbound_mode;
 
-  // pt Cut
+  // pt cut
   float ptCut;
 
   // pdg id of the particles to compute efficincies on

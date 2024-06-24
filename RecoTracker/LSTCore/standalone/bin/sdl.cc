@@ -311,7 +311,7 @@ void run_sdl() {
   // Load various maps used in the SDL reconstruction
   TStopwatch full_timer;
   full_timer.Start();
-  // Determine which maps to use based on given pt Cut for standalone.
+  // Determine which maps to use based on given pt cut for standalone.
   std::string ptCutString = (ana.ptCut >= 0.8) ? "0.8" : "0.6";
   auto hostESData = SDL::loadAndFillESHost(ptCutString);
   auto deviceESData = SDL::loadAndFillESDevice(queues[0], hostESData.get(), ptCutString);
