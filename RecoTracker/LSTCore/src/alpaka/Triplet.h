@@ -1,13 +1,8 @@
 #ifndef Triplet_cuh
 #define Triplet_cuh
 
-#ifdef LST_IS_CMSSW_PACKAGE
 #include "RecoTracker/LSTCore/interface/alpaka/Constants.h"
 #include "RecoTracker/LSTCore/interface/alpaka/Module.h"
-#else
-#include "Constants.h"
-#include "Module.h"
-#endif
 
 #include "Segment.h"
 #include "MiniDoublet.h"
@@ -350,7 +345,7 @@ namespace SDL {
     float drt_InSeg = rtMid - rtIn;
     float dz_InSeg = zMid - zIn;
     float dr3_InSeg =
-        alpaka::math::sqrt(acc, rtMid * rtMid + zMid * zMid) - alpaka::math::sqrt(acc, rtIn * rtIn + zIn + zIn);
+        alpaka::math::sqrt(acc, rtMid * rtMid + zMid * zMid) - alpaka::math::sqrt(acc, rtIn * rtIn + zIn * zIn);
 
     float coshEta = dr3_InSeg / drt_InSeg;
     float dzErr = (zpitchIn + zpitchOut) * (zpitchIn + zpitchOut) * 2.f;

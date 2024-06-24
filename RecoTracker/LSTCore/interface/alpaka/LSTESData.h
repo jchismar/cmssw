@@ -1,11 +1,7 @@
 #ifndef LSTESData_H
 #define LSTESData_H
 
-#ifdef LST_IS_CMSSW_PACKAGE
 #include "RecoTracker/LSTCore/interface/alpaka/Constants.h"
-#else
-#include "Constants.h"
-#endif
 
 #include "HeterogeneousCore/AlpakaInterface/interface/CopyToDevice.h"
 

@@ -1,15 +1,9 @@
 #ifndef Event_cuh
 #define Event_cuh
 
-#ifdef LST_IS_CMSSW_PACKAGE
 #include "RecoTracker/LSTCore/interface/alpaka/Constants.h"
 #include "RecoTracker/LSTCore/interface/alpaka/Module.h"
 #include "RecoTracker/LSTCore/interface/alpaka/LST.h"
-#else
-#include "Constants.h"
-#include "Module.h"
-#include "LST.h"
-#endif
 
 #include "Hit.h"
 #include "ModuleMethods.h"

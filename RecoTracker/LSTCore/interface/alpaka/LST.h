@@ -1,13 +1,8 @@
 #ifndef LST_H
 #define LST_H
 
-#ifdef LST_IS_CMSSW_PACKAGE
 #include "RecoTracker/LSTCore/interface/alpaka/Constants.h"
 #include "RecoTracker/LSTCore/interface/alpaka/LSTESData.h"
-#else
-#include "Constants.h"
-#include "LSTESData.h"
-#endif
 
 #include <cstdlib>
 #include <numeric>
