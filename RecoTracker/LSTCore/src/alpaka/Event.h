@@ -109,6 +109,10 @@ namespace SDL {
           modulesBuffers_(deviceESData->modulesBuffers),
           pixelMapping_(deviceESData->pixelMapping),
           endcapGeometry_(deviceESData->endcapGeometry) {
+      if (pt_cut < 0.6f) {
+        throw std::invalid_argument("Minimum pT cut must be at least 0.6 GeV. Provided value: " +
+                                    std::to_string(pt_cut));
+      }
       init(verbose);
     }
     void resetEvent();
