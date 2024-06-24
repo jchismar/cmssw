@@ -76,8 +76,10 @@ namespace SDL {
           pixelMapping(pixelMappingIn) {}
   };
 
-  std::unique_ptr<LSTESHostData<Dev>> loadAndFillESHost();
-  std::unique_ptr<LSTESDeviceData<Dev>> loadAndFillESDevice(SDL::QueueAcc& queue, const LSTESHostData<Dev>* hostData);
+  std::unique_ptr<LSTESHostData<Dev>> loadAndFillESHost(std::string& ptCutLabel);
+  std::unique_ptr<LSTESDeviceData<Dev>> loadAndFillESDevice(SDL::QueueAcc& queue,
+                                                            const LSTESHostData<Dev>* hostData,
+                                                            std::string& ptCutLabel);
 
 }  // namespace SDL
 
