@@ -30,8 +30,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
   LSTModulesDevESProducer::LSTModulesDevESProducer(const edm::ParameterSet& iConfig)
       : ESProducer(iConfig), ptCutLabel_(iConfig.getParameter<std::string>("ptCutLabel")) {
-    setWhatProduced(this, &LSTModulesDevESProducer::produceHost);
-    auto cc = setWhatProduced(this, &LSTModulesDevESProducer::produceDevice);
+    setWhatProduced(this, &LSTModulesDevESProducer::produceHost, ptCutLabel_);
+    auto cc = setWhatProduced(this, &LSTModulesDevESProducer::produceDevice, ptCutLabel_);
     lstESHostToken_ = cc.consumes();
   }
 

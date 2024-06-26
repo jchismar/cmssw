@@ -29,7 +29,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         : lstPixelSeedInputToken_{consumes<LSTPixelSeedInput>(config.getParameter<edm::InputTag>("pixelSeedInput"))},
           lstPhase2OTHitsInputToken_{
               consumes<LSTPhase2OTHitsInput>(config.getParameter<edm::InputTag>("phase2OTHitsInput"))},
-          lstESToken_{esConsumes()},
+          lstESToken_{esConsumes(edm::ESInputTag("", config.getParameter<std::string>("ptCutLabel")))},
           verbose_(config.getParameter<bool>("verbose")),
           ptCut_(config.getParameter<double>("ptCut")),
           nopLSDupClean_(config.getParameter<bool>("nopLSDupClean")),
@@ -84,6 +84,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
       desc.add<edm::InputTag>("phase2OTHitsInput", edm::InputTag{"lstPhase2OTHitsInputProducer"});
       desc.add<bool>("verbose", false);
       desc.add<double>("ptCut", 0.8);
+      desc.add<std::string>("ptCutLabel", "0.8");
       desc.add<bool>("nopLSDupClean", false);
       desc.add<bool>("tcpLSTriplets", false);
       descriptions.addWithDefaultLabel(desc);

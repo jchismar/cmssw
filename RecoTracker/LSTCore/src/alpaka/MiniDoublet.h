@@ -336,7 +336,7 @@ namespace SDL {
                                                      float rt,
                                                      struct SDL::modules& modulesInGPU,
                                                      uint16_t& moduleIndex,
-                                                     const float& ptCut,
+                                                     const float ptCut,
                                                      float dPhi = 0,
                                                      float dz = 0) {
     // =================================================================
