@@ -32,7 +32,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
       : ESProducer(iConfig), ptCutLabel_(iConfig.getParameter<std::string>("ptCutLabel")) {
     setWhatProduced(this, &LSTModulesDevESProducer::produceHost, ptCutLabel_);
     auto cc = setWhatProduced(this, &LSTModulesDevESProducer::produceDevice, ptCutLabel_);
-    lstESHostToken_ = cc.consumes();
+    lstESHostToken_ = cc.consumes(edm::ESInputTag("", ptCutLabel_));
   }
 
   void LSTModulesDevESProducer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
