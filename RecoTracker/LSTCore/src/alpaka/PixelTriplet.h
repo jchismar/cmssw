@@ -225,7 +225,8 @@ namespace SDL {
                                                                      float& betaInCut,
                                                                      float& betaOutCut,
                                                                      float& deltaBetaCut,
-                                                                     float& kZ) {
+                                                                     float& kZ,
+                                                                     const float ptCut) {
     zLo = -999;
     zHi = -999;
     rtLo = -999;
@@ -273,7 +274,8 @@ namespace SDL {
                                        zHiPointed,
                                        sdlCut,
                                        betaOutCut,
-                                       deltaBetaCut);
+                                       deltaBetaCut,
+                                       ptCut);
     } else if (outerInnerLowerModuleSubdet == SDL::Endcap and outerOuterLowerModuleSubdet == SDL::Endcap) {
       return runTripletDefaultAlgoPPEE(acc,
                                        modulesInGPU,
@@ -303,7 +305,8 @@ namespace SDL {
                                        betaInCut,
                                        betaOutCut,
                                        deltaBetaCut,
-                                       kZ);
+                                       kZ,
+                                       ptCut);
     }
     return false;
   };
@@ -833,6 +836,7 @@ namespace SDL {
                                                                  float& rzChiSquared,
                                                                  float& rPhiChiSquared,
                                                                  float& rPhiChiSquaredInwards,
+                                                                 const float ptCut,
                                                                  bool runChiSquaredCuts = true) {
     bool pass = true;
 
@@ -876,7 +880,8 @@ namespace SDL {
                                                      betaInCut,
                                                      betaOutCut,
                                                      deltaBetaCut,
-                                                     kZ);
+                                                     kZ,
+                                                     ptCut);
       if (not pass)
         return pass;
 
@@ -908,7 +913,8 @@ namespace SDL {
                                                      betaInCut,
                                                      betaOutCut,
                                                      deltaBetaCut,
-                                                     kZ);
+                                                     kZ,
+                                                     ptCut);
       if (not pass)
         return pass;
     }
@@ -1028,7 +1034,8 @@ namespace SDL {
                                   struct SDL::pixelTriplets pixelTripletsInGPU,
                                   unsigned int* connectedPixelSize,
                                   unsigned int* connectedPixelIndex,
-                                  unsigned int nPixelSegments) const {
+                                  unsigned int nPixelSegments,
+                                  const float ptCut) const {
       auto const globalBlockIdx = alpaka::getIdx<alpaka::Grid, alpaka::Blocks>(acc);
       auto const globalThreadIdx = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
       auto const gridBlockExtent = alpaka::getWorkDiv<alpaka::Grid, alpaka::Blocks>(acc);
@@ -1105,7 +1112,8 @@ namespace SDL {
                                                       centerY,
                                                       rzChiSquared,
                                                       rPhiChiSquared,
-                                                      rPhiChiSquaredInwards);
+                                                      rPhiChiSquaredInwards,
+                                                      ptCut);
 
             if (success) {
               float phi =
@@ -1282,7 +1290,8 @@ namespace SDL {
                                                                 float& zHiPointed,
                                                                 float& sdlCut,
                                                                 float& betaOutCut,
-                                                                float& deltaBetaCut)  // pixel to BB and BE segments
+                                                                float& deltaBetaCut,
+                                                                const float ptCut)  // pixel to BB and BE segments
   {
     bool pass = true;
 
@@ -1574,7 +1583,8 @@ namespace SDL {
                                                                 float& betaInCut,
                                                                 float& betaOutCut,
                                                                 float& deltaBetaCut,
-                                                                float& kZ)  // pixel to EE segments
+                                                                float& kZ,
+                                                                const float ptCut)  // pixel to EE segments
   {
     bool pass = true;
     bool isPS_OutLo = (modulesInGPU.moduleType[outerInnerLowerModuleIndex] == SDL::PS);
@@ -2480,7 +2490,8 @@ namespace SDL {
                                                                     float& quintupletRadius,
                                                                     float& centerX,
                                                                     float& centerY,
-                                                                    unsigned int pixelSegmentArrayIndex) {
+                                                                    unsigned int pixelSegmentArrayIndex,
+                                                                    const float ptCut) {
     bool pass = true;
 
     unsigned int T5InnerT3Index = quintupletsInGPU.tripletIndices[2 * quintupletIndex];
@@ -2505,6 +2516,7 @@ namespace SDL {
                                                rzChiSquaredTemp,
                                                rPhiChiSquaredTemp,
                                                rPhiChiSquaredInwardsTemp,
+                                               ptCut,
                                                false);
     if (not pass)
       return false;
@@ -2742,7 +2754,8 @@ namespace SDL {
                                   unsigned int* connectedPixelSize,
                                   unsigned int* connectedPixelIndex,
                                   unsigned int nPixelSegments,
-                                  struct SDL::objectRanges rangesInGPU) const {
+                                  struct SDL::objectRanges rangesInGPU,
+                                  const float ptCut) const {
       auto const globalBlockIdx = alpaka::getIdx<alpaka::Grid, alpaka::Blocks>(acc);
       auto const globalThreadIdx = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
       auto const gridBlockExtent = alpaka::getWorkDiv<alpaka::Grid, alpaka::Blocks>(acc);
@@ -2796,7 +2809,8 @@ namespace SDL {
                                                          quintupletRadius,
                                                          centerX,
                                                          centerY,
-                                                         static_cast<unsigned int>(i_pLS));
+                                                         static_cast<unsigned int>(i_pLS),
+                                                         ptCut);
             if (success) {
               unsigned int totOccupancyPixelQuintuplets =
                   alpaka::atomicOp<alpaka::AtomicAdd>(acc, pixelQuintupletsInGPU.totOccupancyPixelQuintuplets, 1u);
