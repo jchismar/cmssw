@@ -1488,7 +1488,7 @@ namespace SDL {
                                                                    float& betaInCut,
                                                                    float& betaOutCut,
                                                                    float& deltaBetaCut,
-                                                                   const float& ptCut) {
+                                                                   const float ptCut) {
     bool pass = true;
 
     bool isPS_InLo = (modulesInGPU.moduleType[innerInnerLowerModuleIndex] == SDL::PS);
@@ -1770,7 +1770,7 @@ namespace SDL {
                                                                    float& betaOutCut,
                                                                    float& deltaBetaCut,
                                                                    float& kZ,
-                                                                   const float& ptCut) {
+                                                                   const float ptCut) {
     bool pass = true;
     bool isPS_InLo = (modulesInGPU.moduleType[innerInnerLowerModuleIndex] == SDL::PS);
     bool isPS_OutLo = (modulesInGPU.moduleType[outerInnerLowerModuleIndex] == SDL::PS);
@@ -2053,7 +2053,7 @@ namespace SDL {
                                                                    float& betaOutCut,
                                                                    float& deltaBetaCut,
                                                                    float& kZ,
-                                                                   const float& ptCut) {
+                                                                   const float ptCut) {
     bool pass = true;
 
     bool isPS_InLo = (modulesInGPU.moduleType[innerInnerLowerModuleIndex] == SDL::PS);
@@ -2324,7 +2324,7 @@ namespace SDL {
                                                                 float& betaOutCut,
                                                                 float& deltaBetaCut,
                                                                 float& kZ,
-                                                                const float& ptCut) {
+                                                                const float ptCut) {
     bool pass = false;
 
     zLo = -999;
@@ -2529,7 +2529,7 @@ namespace SDL {
                                                                float& chiSquared,
                                                                float& nonAnchorChiSquared,
                                                                bool& TightCutFlag,
-                                                               const float& ptCut) {
+                                                               const float ptCut) {
     bool pass = true;
     unsigned int firstSegmentIndex = tripletsInGPU.segmentIndices[2 * innerTripletIndex];
     unsigned int secondSegmentIndex = tripletsInGPU.segmentIndices[2 * innerTripletIndex + 1];

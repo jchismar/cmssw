@@ -272,7 +272,7 @@ namespace SDL {
                                                       uint16_t& outerLowerModuleIndex,
                                                       unsigned int& innerMDIndex,
                                                       unsigned int& outerMDIndex,
-                                                      const float& ptCut) {
+                                                      const float ptCut) {
     float sdMuls = (modulesInGPU.subdets[innerLowerModuleIndex] == SDL::Barrel)
                        ? miniMulsPtScaleBarrel[modulesInGPU.layers[innerLowerModuleIndex] - 1] * 3.f / ptCut
                        : miniMulsPtScaleEndcap[modulesInGPU.layers[innerLowerModuleIndex] - 1] * 3.f / ptCut;
@@ -474,7 +474,7 @@ namespace SDL {
                                                                   float& dAlphaInnerMDSegmentThreshold,
                                                                   float& dAlphaOuterMDSegmentThreshold,
                                                                   float& dAlphaInnerMDOuterMDThreshold,
-                                                                  const float& ptCut) {
+                                                                  const float ptCut) {
     bool pass = true;
 
     float sdMuls = (modulesInGPU.subdets[innerLowerModuleIndex] == SDL::Barrel)
@@ -588,7 +588,7 @@ namespace SDL {
                                                                   float& dAlphaOuterMDSegmentThreshold,
                                                                   float& dAlphaInnerMDOuterMDThreshold,
                                                                   float& dAlphaInnerMDOuterMD,
-                                                                  const float& ptCut) {
+                                                                  const float ptCut) {
     bool pass = true;
 
     float xIn, yIn;
@@ -732,7 +732,7 @@ namespace SDL {
                                                             float& dAlphaInnerMDSegmentThreshold,
                                                             float& dAlphaOuterMDSegmentThreshold,
                                                             float& dAlphaInnerMDOuterMDThreshold,
-                                                            const float& ptCut) {
+                                                            const float ptCut) {
     zLo = -999.f;
     zHi = -999.f;
     rtLo = -999.f;

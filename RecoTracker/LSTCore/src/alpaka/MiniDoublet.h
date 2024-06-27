@@ -586,7 +586,7 @@ namespace SDL {
                                                float yUpper,
                                                float zUpper,
                                                float rtUpper,
-                                               const float& ptCut) {
+                                               const float ptCut) {
     if (modulesInGPU.subdets[lowerModuleIndex] == SDL::Barrel) {
       return runMiniDoubletDefaultAlgoBarrel(acc,
                                              modulesInGPU,
@@ -664,7 +664,7 @@ namespace SDL {
                                                      float yUpper,
                                                      float zUpper,
                                                      float rtUpper,
-                                                     const float& ptCut) {
+                                                     const float ptCut) {
     bool pass = true;
     dz = zLower - zUpper;
     const float dzCut = modulesInGPU.moduleType[lowerModuleIndex] == SDL::PS ? 2.f : 10.f;
@@ -799,7 +799,7 @@ namespace SDL {
                                                      float yUpper,
                                                      float zUpper,
                                                      float rtUpper,
-                                                     const float& ptCut) {
+                                                     const float ptCut) {
     bool pass = true;
 
     // There are series of cuts that applies to mini-doublet in a "endcap" region

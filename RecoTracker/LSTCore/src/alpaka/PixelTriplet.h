@@ -226,7 +226,7 @@ namespace SDL {
                                                                      float& betaOutCut,
                                                                      float& deltaBetaCut,
                                                                      float& kZ,
-                                                                     const float& ptCut) {
+                                                                     const float ptCut) {
     zLo = -999;
     zHi = -999;
     rtLo = -999;
@@ -836,7 +836,7 @@ namespace SDL {
                                                                  float& rzChiSquared,
                                                                  float& rPhiChiSquared,
                                                                  float& rPhiChiSquaredInwards,
-                                                                 const float& ptCut,
+                                                                 const float ptCut,
                                                                  bool runChiSquaredCuts = true) {
     bool pass = true;
 
@@ -1291,7 +1291,7 @@ namespace SDL {
                                                                 float& sdlCut,
                                                                 float& betaOutCut,
                                                                 float& deltaBetaCut,
-                                                                const float& ptCut)  // pixel to BB and BE segments
+                                                                const float ptCut)  // pixel to BB and BE segments
   {
     bool pass = true;
 
@@ -1584,7 +1584,7 @@ namespace SDL {
                                                                 float& betaOutCut,
                                                                 float& deltaBetaCut,
                                                                 float& kZ,
-                                                                const float& ptCut)  // pixel to EE segments
+                                                                const float ptCut)  // pixel to EE segments
   {
     bool pass = true;
     bool isPS_OutLo = (modulesInGPU.moduleType[outerInnerLowerModuleIndex] == SDL::PS);
@@ -2491,7 +2491,7 @@ namespace SDL {
                                                                     float& centerX,
                                                                     float& centerY,
                                                                     unsigned int pixelSegmentArrayIndex,
-                                                                    const float& ptCut) {
+                                                                    const float ptCut) {
     bool pass = true;
 
     unsigned int T5InnerT3Index = quintupletsInGPU.tripletIndices[2 * quintupletIndex];
