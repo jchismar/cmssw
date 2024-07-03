@@ -132,6 +132,9 @@ void createOptionalOutputBranches() {
   ana.tx->createBranch<vector<float>>("t5_rzChiSquared");
   ana.tx->createBranch<vector<float>>("t5_nonAnchorChiSquared");
 
+  // T3 branches
+  ana.tx->createBranch<vector<float>>("T3_residual");
+
   // Occupancy branches
   ana.tx->createBranch<vector<int>>("module_layers");
   ana.tx->createBranch<vector<int>>("module_subdets");
@@ -298,6 +301,7 @@ void setOptionalOutputBranches(SDL::Event<SDL::Acc>* event) {
 
   setPixelQuintupletOutputBranches(event);
   setQuintupletOutputBranches(event);
+  setTripletOutputBranches(event);
   setPixelTripletOutputBranches(event);
   setOccupancyBranches(event);
 
@@ -512,6 +516,23 @@ void setQuintupletOutputBranches(SDL::Event<SDL::Acc>* event) {
   ana.tx->setBranch<vector<int>>("sim_T5_matched", sim_t5_matched);
   ana.tx->setBranch<vector<vector<int>>>("t5_matched_simIdx", t5_matched_simIdx);
   ana.tx->setBranch<vector<int>>("t5_isDuplicate", t5_isDuplicate);
+}
+
+//________________________________________________________________________________________________________________________________
+void setTripletOutputBranches(SDL::Event<SDL::Acc>* event) {
+    SDL::tripletsBuffer<alpaka::DevCpu>& tripletsInGPU = (*event->getTriplets());
+    SDL::objectRangesBuffer<alpaka::DevCpu>& rangesInGPU = (*event->getRanges());
+    SDL::modulesBuffer<alpaka::DevCpu>& modulesInGPU = (*event->getModules());
+    for (unsigned int lowerModuleIdx = 0; lowerModuleIdx < *(modulesInGPU.nLowerModules); ++lowerModuleIdx)
+    {
+        unsigned int nTriplets = tripletsInGPU.nTriplets[lowerModuleIdx];
+        for (unsigned int idx = 0; idx < nTriplets; idx++)
+        {
+            unsigned int tripletIndex = rangesInGPU.tripletModuleIndices[lowerModuleIdx] + idx;
+            const float residual = tripletsInGPU.residual[tripletIndex];
+            ana.tx->pushbackToBranch<float>("T3_residual", residual);
+        }
+    }
 }
 
 //________________________________________________________________________________________________________________________________

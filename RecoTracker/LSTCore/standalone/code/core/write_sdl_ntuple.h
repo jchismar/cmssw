@@ -24,6 +24,7 @@ void setOccupancyBranches(SDL::Event<SDL::Acc>* event);
 void setPixelQuintupletOutputBranches(SDL::Event<SDL::Acc>* event);
 void setQuintupletOutputBranches(SDL::Event<SDL::Acc>* event);
 void setPixelTripletOutputBranches(SDL::Event<SDL::Acc>* event);
+void setTripletOutputBranches(SDL::Event<SDL::Acc>* event);
 void setGnnNtupleBranches(SDL::Event<SDL::Acc>* event);
 void setGnnNtupleMiniDoublet(SDL::Event<SDL::Acc>* event, unsigned int MD);
 
