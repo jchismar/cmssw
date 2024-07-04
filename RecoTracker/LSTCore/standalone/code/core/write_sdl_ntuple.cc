@@ -134,6 +134,7 @@ void createOptionalOutputBranches() {
 
   // T3 branches
   ana.tx->createBranch<vector<float>>("T3_residual");
+  ana.tx->createBranch<vector<int>>("t3_isFake");
 
   // Occupancy branches
   ana.tx->createBranch<vector<int>>("module_layers");
@@ -531,6 +532,21 @@ void setTripletOutputBranches(SDL::Event<SDL::Acc>* event) {
             unsigned int tripletIndex = rangesInGPU.tripletModuleIndices[lowerModuleIdx] + idx;
             const float residual = tripletsInGPU.residual[tripletIndex];
             ana.tx->pushbackToBranch<float>("T3_residual", residual);
+            std::vector<unsigned int> hit_idx, hit_type;
+            std::tie(hit_idx, hit_type) = getHitIdxsAndHitTypesFromT3(event, tripletIndex);
+            std::vector<int> simidx;
+            std::vector<float> simidxfrac;
+            std::tie(simidx, simidxfrac) = matchedSimTrkIdxsAndFracs(hit_idx, hit_type, false, 0);
+            bool isfake = true;
+            for (size_t isim = 0; isim < simidx.size(); ++isim)
+            {
+                if (simidxfrac[isim] > 0.75)
+                {
+                    isfake = false;
+                    break;
+                }
+            }
+            ana.tx->pushbackToBranch<int>("t3_isFake", isfake);
         }
     }
 }
