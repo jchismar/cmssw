@@ -260,13 +260,13 @@ namespace SDL {
     const int layer3 = modulesInGPU.sdlLayers[outerOuterLowerModuleIndex];
 
     //get the rt and z
-    const float& r1 = mdsInGPU.anchorRt[firstMDIndex]/100; // rt is stored in the unit of cm, in the calculation below we want to use the meter unit
-    const float& r2 = mdsInGPU.anchorRt[secondMDIndex]/100;
-    const float& r3 = mdsInGPU.anchorRt[thirdMDIndex]/100;
+    const float& r1 = mdsInGPU.anchorRt[firstMDIndex]; // all the values are stored in the unit of cm, in the calculation below we need to be cautious if we want to use the meter unit
+    const float& r2 = mdsInGPU.anchorRt[secondMDIndex];
+    const float& r3 = mdsInGPU.anchorRt[thirdMDIndex];
 
-    const float& z1 = mdsInGPU.anchorZ[firstMDIndex]/100;
-    const float& z2 = mdsInGPU.anchorZ[secondMDIndex]/100;
-    const float& z3 = mdsInGPU.anchorZ[thirdMDIndex]/100;
+    const float& z1 = mdsInGPU.anchorZ[firstMDIndex];
+    const float& z2 = mdsInGPU.anchorZ[secondMDIndex];
+    const float& z3 = mdsInGPU.anchorZ[thirdMDIndex];
 /*
     //get the type of module: ps or 2s
     const int moduleType1 = modulesInGPU.moduleType[innerInnerLowerModuleIndex];  //0 is ps, 1 is 2s
@@ -274,23 +274,23 @@ namespace SDL {
     const int moduleType3 = modulesInGPU.moduleType[outerOuterLowerModuleIndex];
 
     //get the x,y position of each MD
-    const float& x1 = mdsInGPU.anchorX[firstMDIndex] / 100;
-    const float& x2 = mdsInGPU.anchorX[secondMDIndex] / 100;
-    const float& x3 = mdsInGPU.anchorX[thirdMDIndex] / 100;
+    const float& x1 = mdsInGPU.anchorX[firstMDIndex];
+    const float& x2 = mdsInGPU.anchorX[secondMDIndex];
+    const float& x3 = mdsInGPU.anchorX[thirdMDIndex];
 
-    const float& y1 = mdsInGPU.anchorY[firstMDIndex] / 100;
-    const float& y2 = mdsInGPU.anchorY[secondMDIndex] / 100;
-    const float& y3 = mdsInGPU.anchorY[thirdMDIndex] / 100;
+    const float& y1 = mdsInGPU.anchorY[firstMDIndex];
+    const float& y2 = mdsInGPU.anchorY[secondMDIndex];
+    const float& y3 = mdsInGPU.anchorY[thirdMDIndex];
 
     //use the second MD as the initial point to provide x0,y0,z0 and rt0.
-    float x_init = mdsInGPU.anchorX[secondMDIndex] / 100;
-    float y_init = mdsInGPU.anchorY[secondMDIndex] / 100;
-    float z_init = mdsInGPU.anchorZ[secondMDIndex] / 100;
-    float rt_init = mdsInGPU.anchorRt[secondMDIndex] / 100;  //use the second MD as initial point
+    float x_init = mdsInGPU.anchorX[secondMDIndex];
+    float y_init = mdsInGPU.anchorY[secondMDIndex];
+    float z_init = mdsInGPU.anchorZ[secondMDIndex];
+    float rt_init = mdsInGPU.anchorRt[secondMDIndex];  //use the second MD as initial point
 
     //use the 3 MDs to fit a circle. This is the circle parameters, for circle centers and circle radius
-    float x_center = circleCenterX / 100;
-    float y_center = circleCenterY / 100;
+    float x_center = circleCenterX;
+    float y_center = circleCenterY;
     float Pt = 2 * k2Rinv1GeVf * circleRadius; //k2Rinv1GeVf is already in cm^(-1)
 
     //get the absolute value of px and py at the initial point
@@ -304,14 +304,13 @@ namespace SDL {
         alpaka::math::sqrt(acc, (x_init - x_center) * (x_init - x_center) + (y_init - y_center) * (y_init - y_center));
     float AB2 = (x1 - x_init) * (x1 - x_init) + (y1 - y_init) * (y1 - y_init);
     float dPhi = alpaka::math::acos(acc, (AO * AO + BO * BO - AB2) / (2 * AO * BO)); //Law of Cosines
-    float ds = circleRadius / 100 * dPhi;
+    float ds = circleRadius * dPhi;
 
     float Pz = (z_init - z1) / ds * Pt;
     float p = alpaka::math::sqrt(acc, Px * Px + Py * Py + Pz * Pz);
 */
 
     residual = z2 - ((z3 - z1) / (r3 - r1) * (r2 - r1) + z1);
-    residual = residual * 100; //temporary for check, dividing the r,z by 100 times above..
 
     if (layer1 == 12 and layer2 == 13 and layer3 == 14) {
       return false;
