@@ -989,6 +989,7 @@ namespace SDL {
                                    zHi,
                                    rtLo,
                                    rtHi,
+                                   residual,
                                    zLoPointed,
                                    zHiPointed,
                                    sdlCut,
