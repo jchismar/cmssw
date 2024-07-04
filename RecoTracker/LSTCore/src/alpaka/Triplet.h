@@ -249,22 +249,59 @@ namespace SDL {
                                                        unsigned int& firstMDIndex,
                                                        unsigned int& secondMDIndex,
                                                        unsigned int& thirdMDIndex,
-                                                       float& residual) {
-    //get the rt and z
-    const float& r1 = mdsInGPU.anchorRt[firstMDIndex];
-    const float& r2 = mdsInGPU.anchorRt[secondMDIndex];
-    const float& r3 = mdsInGPU.anchorRt[thirdMDIndex];
-
-    const float& z1 = mdsInGPU.anchorZ[firstMDIndex];
-    const float& z2 = mdsInGPU.anchorZ[secondMDIndex];
-    const float& z3 = mdsInGPU.anchorZ[thirdMDIndex];
+                                                       float& residual,
+                                                       float& circleRadius,
+                                                       float& circleCenterX, 
+                                                       float& circleCenterY) {
 
     //following Philip's layer number prescription
     const int layer1 = modulesInGPU.sdlLayers[innerInnerLowerModuleIndex];
     const int layer2 = modulesInGPU.sdlLayers[middleLowerModuleIndex];
     const int layer3 = modulesInGPU.sdlLayers[outerOuterLowerModuleIndex];
 
+    //get the rt and z
+    const float& r1 = mdsInGPU.anchorRt[firstMDIndex]/100; // rt is stored in the unit of cm, in the calculation below we want to use the meter unit
+    const float& r2 = mdsInGPU.anchorRt[secondMDIndex]/100;
+    const float& r3 = mdsInGPU.anchorRt[thirdMDIndex]/100;
+
+    const float& z1 = mdsInGPU.anchorZ[firstMDIndex]/100;
+    const float& z2 = mdsInGPU.anchorZ[secondMDIndex]/100;
+    const float& z3 = mdsInGPU.anchorZ[thirdMDIndex]/100;
+/*
+    //get the type of module: ps or 2s
+    const int moduleType1 = modulesInGPU.moduleType[innerInnerLowerModuleIndex];  //0 is ps, 1 is 2s
+    const int moduleType2 = modulesInGPU.moduleType[middleLowerModuleIndex];
+    const int moduleType3 = modulesInGPU.moduleType[outerOuterLowerModuleIndex];
+
+    //get the x,y position of each MD
+    const float& x1 = mdsInGPU.anchorX[firstMDIndex] / 100;
+    const float& x2 = mdsInGPU.anchorX[secondMDIndex] / 100;
+    const float& x3 = mdsInGPU.anchorX[thirdMDIndex] / 100;
+
+    const float& y1 = mdsInGPU.anchorY[firstMDIndex] / 100;
+    const float& y2 = mdsInGPU.anchorY[secondMDIndex] / 100;
+    const float& y3 = mdsInGPU.anchorY[thirdMDIndex] / 100;
+
+    //use the second MD as the initial point to provide x0,y0,z0 and rt0.
+    float x_init = mdsInGPU.anchorX[secondMDIndex] / 100;
+    float y_init = mdsInGPU.anchorY[secondMDIndex] / 100;
+    float z_init = mdsInGPU.anchorZ[secondMDIndex] / 100;
+    float rt_init = mdsInGPU.anchorRt[secondMDIndex] / 100;  //use the second MD as initial point
+
+    //use the 3 MDs to fit a circle. This is the circle parameters, for circle centers and circle radius
+    float x_center = circleCenterX / 100;
+    float y_center = circleCenterY / 100;
+    float Pt = 2 * k2Rinv1GeVf * circleRadius; //k2Rinv1GeVf is already in cm^(-1)
+
+    //get the absolute value of px and py at the initial point
+    float pseudo_phi = alpaka::math::atan(
+        acc, (y_init - y_center) / (x_init - x_center));  //actually represent pi/2-phi, wrt helix axis z
+    float Px = Pt * alpaka::math::abs(acc, alpaka::math::sin(acc, pseudo_phi)),
+          Py = Pt * alpaka::math::abs(acc, cos(pseudo_phi));
+*/
+
     residual = z2 - ((z3 - z1) / (r3 - r1) * (r2 - r1) + z1);
+    residual = residual * 100; //temporary for check, dividing the r,z by 100 times above..
 
     if (layer1 == 12 and layer2 == 13 and layer3 == 14) {
       return false;
@@ -837,19 +874,6 @@ namespace SDL {
     unsigned int secondMDIndex = segmentsInGPU.mdIndices[2 * outerSegmentIndex];
     unsigned int thirdMDIndex = segmentsInGPU.mdIndices[2 * outerSegmentIndex + 1];
 
-    pass = pass and (passRZConstraint(acc,
-                                      modulesInGPU,
-                                      mdsInGPU,
-                                      segmentsInGPU,
-                                      innerInnerLowerModuleIndex,
-                                      middleLowerModuleIndex,
-                                      outerOuterLowerModuleIndex,
-                                      firstMDIndex,
-                                      secondMDIndex,
-                                      thirdMDIndex,
-                                      residual));
-    if (not pass)
-      return pass;
     pass = pass and (passPointingConstraint(acc,
                                             modulesInGPU,
                                             mdsInGPU,
@@ -879,6 +903,22 @@ namespace SDL {
     float y3 = mdsInGPU.anchorY[thirdMDIndex];
 
     circleRadius = computeRadiusFromThreeAnchorHits(acc, x1, y1, x2, y2, x3, y3, circleCenterX, circleCenterY);
+
+    pass = pass and (passRZConstraint(acc,
+                                      modulesInGPU,
+                                      mdsInGPU,
+                                      segmentsInGPU,
+                                      innerInnerLowerModuleIndex,
+                                      middleLowerModuleIndex,
+                                      outerOuterLowerModuleIndex,
+                                      firstMDIndex,
+                                      secondMDIndex,
+                                      thirdMDIndex,
+                                      residual,
+                                      circleRadius,
+                                      circleCenterX, 
+                                      circleCenterY));
+
     return pass;
   };
 
