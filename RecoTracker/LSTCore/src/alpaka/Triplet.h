@@ -260,13 +260,13 @@ namespace SDL {
     const int layer3 = modulesInGPU.sdlLayers[outerOuterLowerModuleIndex];
 
     //get the rt and z
-    const float& r1 = mdsInGPU.anchorRt[firstMDIndex]; // all the values are stored in the unit of cm, in the calculation below we need to be cautious if we want to use the meter unit
-    const float& r2 = mdsInGPU.anchorRt[secondMDIndex];
-    const float& r3 = mdsInGPU.anchorRt[thirdMDIndex];
+    const float r1 = mdsInGPU.anchorRt[firstMDIndex]; // all the values are stored in the unit of cm, in the calculation below we need to be cautious if we want to use the meter unit
+    const float r2 = mdsInGPU.anchorRt[secondMDIndex];
+    const float r3 = mdsInGPU.anchorRt[thirdMDIndex];
 
-    const float& z1 = mdsInGPU.anchorZ[firstMDIndex];
-    const float& z2 = mdsInGPU.anchorZ[secondMDIndex];
-    const float& z3 = mdsInGPU.anchorZ[thirdMDIndex];
+    const float z1 = mdsInGPU.anchorZ[firstMDIndex];
+    const float z2 = mdsInGPU.anchorZ[secondMDIndex];
+    const float z3 = mdsInGPU.anchorZ[thirdMDIndex];
 /*
     //get the type of module: ps or 2s
     const int moduleType1 = modulesInGPU.moduleType[innerInnerLowerModuleIndex];  //0 is ps, 1 is 2s
@@ -274,13 +274,13 @@ namespace SDL {
     const int moduleType3 = modulesInGPU.moduleType[outerOuterLowerModuleIndex];
 
     //get the x,y position of each MD
-    const float& x1 = mdsInGPU.anchorX[firstMDIndex];
-    const float& x2 = mdsInGPU.anchorX[secondMDIndex];
-    const float& x3 = mdsInGPU.anchorX[thirdMDIndex];
+    const float x1 = mdsInGPU.anchorX[firstMDIndex];
+    const float x2 = mdsInGPU.anchorX[secondMDIndex];
+    const float x3 = mdsInGPU.anchorX[thirdMDIndex];
 
-    const float& y1 = mdsInGPU.anchorY[firstMDIndex];
-    const float& y2 = mdsInGPU.anchorY[secondMDIndex];
-    const float& y3 = mdsInGPU.anchorY[thirdMDIndex];
+    const float y1 = mdsInGPU.anchorY[firstMDIndex];
+    const float y2 = mdsInGPU.anchorY[secondMDIndex];
+    const float y3 = mdsInGPU.anchorY[thirdMDIndex];
 
     //use the second MD as the initial point to provide x0,y0,z0 and rt0.
     float x_init = mdsInGPU.anchorX[secondMDIndex];
