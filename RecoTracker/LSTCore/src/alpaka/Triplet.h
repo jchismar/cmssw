@@ -298,6 +298,16 @@ namespace SDL {
         acc, (y_init - y_center) / (x_init - x_center));  //actually represent pi/2-phi, wrt helix axis z
     float Px = Pt * alpaka::math::abs(acc, alpaka::math::sin(acc, pseudo_phi)),
           Py = Pt * alpaka::math::abs(acc, cos(pseudo_phi));
+
+    float AO = alpaka::math::sqrt(acc, (x1 - x_center) * (x1 - x_center) + (y1 - y_center) * (y1 - y_center));
+    float BO =
+        alpaka::math::sqrt(acc, (x_init - x_center) * (x_init - x_center) + (y_init - y_center) * (y_init - y_center));
+    float AB2 = (x1 - x_init) * (x1 - x_init) + (y1 - y_init) * (y1 - y_init);
+    float dPhi = alpaka::math::acos(acc, (AO * AO + BO * BO - AB2) / (2 * AO * BO)); //Law of Cosines
+    float ds = circleRadius / 100 * dPhi;
+
+    float Pz = (z_init - z1) / ds * Pt;
+    float p = alpaka::math::sqrt(acc, Px * Px + Py * Py + Pz * Pz);
 */
 
     residual = z2 - ((z3 - z1) / (r3 - r1) * (r2 - r1) + z1);
