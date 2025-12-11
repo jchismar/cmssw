@@ -5,10 +5,12 @@ from ..modules.hltInitialStepTrackCandidates_cfi import *
 from ..modules.hltInitialStepTrackCutClassifier_cfi import *
 from ..modules.hltInitialStepTracks_cfi import *
 from ..modules.hltInitialStepTrackSelectionHighPurity_cfi import *
+from ..eventsetup.trackdnn_source_cfi import hltInitialStepTrackTorchClassifier
 
 HLTInitialStepSequence = cms.Sequence(hltInitialStepSeeds+
                                       hltInitialStepTrackCandidates+
                                       hltInitialStepTracks+
+                                      hltInitialStepTrackTorchClassifier+
                                       hltInitialStepTrackCutClassifier+
                                       hltInitialStepTrackSelectionHighPurity)
 
@@ -28,6 +30,7 @@ _HLTInitialStepSequenceLST = cms.Sequence(
     +hltLST
     +hltInitialStepTrackCandidates
     +hltInitialStepTracks
+    +hltInitialStepTrackTorchClassifier
     +hltInitialStepTrackCutClassifier
     +hltInitialStepTrackSelectionHighPurity
 )
@@ -50,6 +53,7 @@ _HLTInitialStepSequenceSingleIterPatatrackLSTSeeding = cms.Sequence(
     +hltInitialStepTrajectorySeedsLST
     +hltInitialStepTrackCandidates
     +hltInitialStepTracks
+    +hltInitialStepTrackTorchClassifier
     +hltInitialStepTrackCutClassifier
     +hltInitialStepTrackSelectionHighPurity
 )
@@ -81,6 +85,7 @@ _HLTInitialStepSequenceMkFitTracking = cms.Sequence(
     +hltInitialStepTrackCandidatesMkFit
     +hltInitialStepTrackCandidates
     +hltInitialStepTracks
+    +hltInitialStepTrackTorchClassifier
     +hltInitialStepTrackCutClassifier
     +hltInitialStepTrackSelectionHighPurity
 )
@@ -100,6 +105,7 @@ _HLTInitialStepSequenceSingleIterPatatrackLSTSeedingMkFitTracking = cms.Sequence
     +hltInitialStepTrackCandidatesMkFit
     +hltInitialStepTrackCandidates
     +hltInitialStepTracks
+    +hltInitialStepTrackTorchClassifier
     +hltInitialStepTrackCutClassifier
     +hltInitialStepTrackSelectionHighPurity
 )
@@ -116,6 +122,7 @@ _HLTInitialStepSequenceMkFitFitTracking = cms.Sequence(
     +hltInitialStepTrackCandidatesMkFit
     +hltInitialStepTrackCandidatesMkFitFit
     +hltInitialStepTracks
+    +hltInitialStepTrackTorchClassifier
     +hltInitialStepTrackCutClassifier
     +hltInitialStepTrackSelectionHighPurity
 )
@@ -132,6 +139,7 @@ _HLTInitialStepSequenceSingleIterPatatrackLSTSeedingMkFitFitTracking = cms.Seque
     +hltInitialStepTrackCandidatesMkFit
     +hltInitialStepTrackCandidatesMkFitFit
     +hltInitialStepTracks
+    +hltInitialStepTrackTorchClassifier
     +hltInitialStepTrackCutClassifier
     +hltInitialStepTrackSelectionHighPurity
 )

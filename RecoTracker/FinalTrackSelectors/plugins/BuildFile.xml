@@ -24,6 +24,7 @@
 <use name="MagneticField/Engine"/>
 <use name="MagneticField/Records"/>
 <use name="PhysicsTools/TensorFlow"/>
+<use name="PhysicsTools/PyTorch"/>
 <use name="RecoLocalTracker/SiStripClusterizer"/>
 <use name="RecoTracker/FinalTrackSelectors"/>
 <use name="RecoTracker/Record"/>
