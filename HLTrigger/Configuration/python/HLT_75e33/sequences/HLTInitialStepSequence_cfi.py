@@ -26,6 +26,7 @@ HLTInitialStepSequence = cms.Sequence(
     +hltInitialStepTrackCandidatesMkFit
     +hltInitialStepTrackCandidates
     +hltInitialStepTracks
+    +hltInitialStepTrackTorchClassifier
     +hltInitialStepTrackCutClassifier
     +hltInitialStepTrackSelectionHighPurity
 )
@@ -54,6 +55,7 @@ _HLTInitialStepSequenceLST = cms.Sequence(
     +hltLST
     +hltInitialStepTrackCandidates
     +hltInitialStepTracks
+    +hltInitialStepTrackTorchClassifier
     +hltInitialStepTrackCutClassifier
     +hltInitialStepTrackSelectionHighPurity
 )
@@ -76,6 +78,43 @@ _HLTInitialStepSequenceNGTScouting = cms.Sequence(
 from Configuration.ProcessModifiers.ngtScouting_cff import ngtScouting
 ngtScouting.toReplaceWith(HLTInitialStepSequence,_HLTInitialStepSequenceNGTScouting)
 
+from ..sequences.HLTMkFitInputSequence_cfi import *
+from ..modules.hltInitialStepMkFitSeeds_cfi import *
+from ..modules.hltInitialStepTrackCandidatesMkFit_cfi import *
+_HLTInitialStepSequenceMkFitTracking = cms.Sequence(
+    hltInitialStepSeeds
+    +hltSiPhase2RecHits
+    +HLTMkFitInputSequence
+    +hltInitialStepMkFitSeeds
+    +hltInitialStepTrackCandidatesMkFit
+    +hltInitialStepTrackCandidates
+    +hltInitialStepTracks
+    +hltInitialStepTrackTorchClassifier
+    +hltInitialStepTrackCutClassifier
+    +hltInitialStepTrackSelectionHighPurity
+)
+
+from Configuration.ProcessModifiers.hltTrackingMkFitInitialStep_cff import hltTrackingMkFitInitialStep
+(~seedingLST & ~trackingLST & hltTrackingMkFitInitialStep).toReplaceWith(HLTInitialStepSequence,_HLTInitialStepSequenceMkFitTracking)
+
+_HLTInitialStepSequenceSingleIterPatatrackLSTSeedingMkFitTracking = cms.Sequence(
+     hltInitialStepSeeds
+    +hltInitialStepSeedTracksLST
+    +hltSiPhase2RecHits # Probably need to move elsewhere in the final setup                                                 
+    +hltInputLST
+    +hltLST
+    +hltInitialStepTrajectorySeedsLST
+    +HLTMkFitInputSequence
+    +hltInitialStepMkFitSeeds
+    +hltInitialStepTrackCandidatesMkFit
+    +hltInitialStepTrackCandidates
+    +hltInitialStepTracks
+    +hltInitialStepTrackTorchClassifier
+    +hltInitialStepTrackCutClassifier
+    +hltInitialStepTrackSelectionHighPurity
+)
+
+(singleIterPatatrack & trackingLST & seedingLST & hltTrackingMkFitInitialStep).toReplaceWith(HLTInitialStepSequence, _HLTInitialStepSequenceSingleIterPatatrackLSTSeedingMkFitTracking)
 
 from ..modules.hltInitialStepTrackCandidatesMkFitFit_cfi import *
 _HLTInitialStepSequenceMkFitFit = cms.Sequence(
@@ -90,6 +129,7 @@ _HLTInitialStepSequenceMkFitFit = cms.Sequence(
     +hltInitialStepTrackCandidatesMkFit
     +hltInitialStepTrackCandidatesMkFitFit
     +hltInitialStepTracks
+    +hltInitialStepTrackTorchClassifier
     +hltInitialStepTrackCutClassifier
     +hltInitialStepTrackSelectionHighPurity
 )
