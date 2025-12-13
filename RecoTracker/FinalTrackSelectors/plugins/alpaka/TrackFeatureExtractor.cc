@@ -45,6 +45,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
       const auto nTracks = tracks.size();
 
+      // Create HOST collection first, fill it, then copy to device
       PortableHostCollection<TrackFeaturesSoA> features_host(nTracks);
       
       auto features_view = features_host.view();
@@ -91,15 +92,16 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         features_view[i].ndof() = track.ndof();
 
         const auto& hitPattern = track.hitPattern();
-        features_view[i].lostInnerHits() = hitPattern.numberOfLostHits(reco::HitPattern::MISSING_INNER_HITS);
-        features_view[i].lostOuterHits() = hitPattern.numberOfLostHits(reco::HitPattern::MISSING_OUTER_HITS);
-        features_view[i].layersOffInner() = hitPattern.trackerLayersWithoutMeasurement(reco::HitPattern::MISSING_INNER_HITS);
-        features_view[i].layersOffOuter() = hitPattern.trackerLayersWithoutMeasurement(reco::HitPattern::MISSING_OUTER_HITS);
+        features_view[i].lostInnerHits() = hitPattern.numberOfLostTrackerHits(reco::HitPattern::MISSING_INNER_HITS);
+        features_view[i].lostOuterHits() = hitPattern.numberOfLostTrackerHits(reco::HitPattern::MISSING_OUTER_HITS);
+        features_view[i].layersOffInner() = hitPattern.trackerLayersTotallyOffOrBad(reco::HitPattern::MISSING_INNER_HITS);
+        features_view[i].layersOffOuter() = hitPattern.trackerLayersTotallyOffOrBad(reco::HitPattern::MISSING_OUTER_HITS);
         features_view[i].layersWithoutMeas() = hitPattern.trackerLayersWithoutMeasurement(reco::HitPattern::TRACK_HITS);
         features_view[i].validPixelHits() = hitPattern.numberOfValidPixelHits();
         features_view[i].validStripHits() = hitPattern.numberOfValidStripHits();
       }
 
+      // Create device collection and copy from host
       TrackFeaturesDeviceCollection features_device(nTracks, iEvent.queue());
       alpaka::memcpy(iEvent.queue(), features_device.buffer(), features_host.const_buffer());
       
