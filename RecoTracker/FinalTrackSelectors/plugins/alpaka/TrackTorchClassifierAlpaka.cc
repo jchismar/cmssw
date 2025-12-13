@@ -12,8 +12,6 @@
 #include "HeterogeneousCore/AlpakaCore/interface/alpaka/stream/EDProducer.h"
 #include "HeterogeneousCore/AlpakaInterface/interface/config.h"
 
-#include "DataFormats/Portable/interface/PortableHostCollection.h"
-
 #include "PhysicsTools/PyTorchAlpaka/interface/TensorCollection.h"
 #include "PhysicsTools/PyTorchAlpaka/interface/alpaka/AlpakaModel.h"
 
@@ -24,10 +22,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     TrackTorchClassifierAlpaka(const edm::ParameterSet& iConfig)
         : EDProducer<>(iConfig),
           features_token_(consumes(iConfig.getParameter<edm::InputTag>("features"))),
-          scores_device_token_{produces()},
-          scores_host_token_{produces("scores").template produces<std::vector<float>>()},
-          model_(iConfig.getParameter<edm::FileInPath>("modelPath").fullPath()) {
-    }
+          scores_token_{produces()},
+          model_(iConfig.getParameter<edm::FileInPath>("modelPath").fullPath()) {}
 
     static void fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
       edm::ParameterSetDescription desc;
@@ -82,27 +78,12 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
       model_.forward(iEvent.queue(), inputs, outputs);
       
-      // Copy scores to host for CPU consumption
-      PortableHostCollection<TrackScoresSoA> scores_host(batch_size);
-      alpaka::memcpy(iEvent.queue(), scores_host.buffer(), scores_device.const_buffer());
-      alpaka::wait(iEvent.queue());
-      
-      // Convert to std::vector<float> for easy CPU access
-      std::vector<float> scores_vec;
-      scores_vec.reserve(batch_size);
-      auto scores_view = scores_host.const_view();
-      for (int i = 0; i < batch_size; ++i) {
-        scores_vec.push_back(scores_view[i].score());
-      }
-      
-      iEvent.emplace(scores_device_token_, std::move(scores_device));
-      iEvent.put(scores_host_token_, std::make_unique<std::vector<float>>(std::move(scores_vec)));
+      iEvent.emplace(scores_token_, std::move(scores_device));
     }
 
   private:
     const device::EDGetToken<TrackFeaturesDeviceCollection> features_token_;
-    const device::EDPutToken<TrackScoresDeviceCollection> scores_device_token_;
-    const edm::EDPutTokenT<std::vector<float>> scores_host_token_;
+    const device::EDPutToken<TrackScoresDeviceCollection> scores_token_;
     torch::AlpakaModel model_;
   };
 

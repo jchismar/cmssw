@@ -3,7 +3,6 @@
 
 #include "DataFormats/SoATemplate/interface/SoALayout.h"
 
-// Define the SoA layout for track features (29 features per track)
 GENERATE_SOA_LAYOUT(TrackFeaturesSoALayout,
                     SOA_COLUMN(float, pt),
                     SOA_COLUMN(float, innerMomentumX),
