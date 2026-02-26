@@ -28,8 +28,8 @@ private:
 
   const edm::EDGetTokenT<reco::TrackCollection> src_;
   const edm::EDGetTokenT<reco::BeamSpot> beamspot_;
-  const edm::EDGetTokenT<reco::VertexCollection> vertices_;
-  const bool ignoreVertices_;
+  // const edm::EDGetTokenT<reco::VertexCollection> vertices_;
+  // const bool ignoreVertices_;
   
   const std::string modelPath_;
   const int batchSize_;
@@ -45,8 +45,8 @@ private:
 TrackTorchClassifier::TrackTorchClassifier(const edm::ParameterSet& iConfig)
     : src_(consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("src"))),
       beamspot_(consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamspot"))),
-      vertices_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("vertices"))),
-      ignoreVertices_(iConfig.getParameter<bool>("ignoreVertices")),
+      // vertices_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("vertices"))),
+      // ignoreVertices_(iConfig.getParameter<bool>("ignoreVertices")),
       modelPath_(iConfig.getParameter<std::string>("modelPath")),
       batchSize_(iConfig.getParameter<int>("batchSize")),
       minScore_(iConfig.getParameter<double>("minScore")),
@@ -59,9 +59,9 @@ void TrackTorchClassifier::fillDescriptions(edm::ConfigurationDescriptions& desc
   edm::ParameterSetDescription desc;
   desc.add<edm::InputTag>("src", edm::InputTag("hltInitialStepTracks"));
   desc.add<edm::InputTag>("beamspot", edm::InputTag("hltOnlineBeamSpot"));
-  desc.add<edm::InputTag>("vertices", edm::InputTag(""));
-  desc.add<bool>("ignoreVertices", true);
-  desc.add<std::string>("modelPath", "RecoTracker/FinalTrackSelectors/data/best_model.pt");
+  // desc.add<edm::InputTag>("vertices", edm::InputTag(""));
+  // desc.add<bool>("ignoreVertices", true);
+  desc.add<std::string>("modelPath", "RecoTracker/FinalTrackSelectors/data/best_model_bce_14feat.pt");
   desc.add<int>("batchSize", 16);
   desc.add<double>("minScore", 0.5)->setComment("Minimum DNN score to keep track (working point)");
   descriptions.addWithDefaultLabel(desc);
@@ -81,16 +81,17 @@ void TrackTorchClassifier::produce(edm::Event& iEvent, const edm::EventSetup& iS
   const auto& tracks = iEvent.get(src_);
   const auto& beamSpot = iEvent.get(beamspot_);
   
-  reco::VertexCollection vertices;
-  if (!ignoreVertices_) {
-    auto verticesHandle = iEvent.getHandle(vertices_);
-    if (verticesHandle.isValid()) {
-      vertices = *verticesHandle;
-    }
-  }
+  // reco::VertexCollection vertices;
+  // if (!ignoreVertices_) {
+  //   auto verticesHandle = iEvent.getHandle(vertices_);
+  //   if (verticesHandle.isValid()) {
+  //     vertices = *verticesHandle;
+  //   }
+  // }
   
   int size_in = (int)tracks.size();
   std::vector<float> output(size_in, 0.0f);
+  std::vector<int> passThrough(size_in, 0);
   
   auto filteredTracks = std::make_unique<reco::TrackCollection>();
 
@@ -111,27 +112,14 @@ void TrackTorchClassifier::produce(edm::Event& iEvent, const edm::EventSetup& iS
     int actual_batch_size = batch_end - batch_start;
 
     std::vector<float> inputData;
-    inputData.reserve(actual_batch_size * 29);
+    inputData.reserve(actual_batch_size * 15);
 
     for (int itrack = batch_start; itrack < batch_end; itrack++) {
       const auto& trk = tracks[itrack];
-      const auto& bestVertex = getBestVertex(trk, vertices);
 
-      inputData.push_back(trk.pt());
-      inputData.push_back(trk.innerMomentum().x());
-      inputData.push_back(trk.innerMomentum().y());
-      inputData.push_back(trk.innerMomentum().z());
-      inputData.push_back(trk.innerMomentum().rho());
-      inputData.push_back(trk.outerMomentum().x());
-      inputData.push_back(trk.outerMomentum().y());
-      inputData.push_back(trk.outerMomentum().z());
-      inputData.push_back(trk.outerMomentum().rho());
-      inputData.push_back(trk.ptError());
-      inputData.push_back(trk.dxy(bestVertex));
-      inputData.push_back(trk.dz(bestVertex));
       inputData.push_back(trk.dxy(beamSpot.position()));
       inputData.push_back(trk.dz(beamSpot.position()));
-      inputData.push_back(trk.dxyError());
+      // inputData.push_back(trk.dxyError());
       inputData.push_back(trk.dzError());
       inputData.push_back(trk.normalizedChi2());
       inputData.push_back(trk.eta());
@@ -141,14 +129,15 @@ void TrackTorchClassifier::produce(edm::Event& iEvent, const edm::EventSetup& iS
       inputData.push_back(trk.ndof());
       inputData.push_back(trk.hitPattern().numberOfLostTrackerHits(reco::HitPattern::MISSING_INNER_HITS));
       inputData.push_back(trk.hitPattern().numberOfLostTrackerHits(reco::HitPattern::MISSING_OUTER_HITS));
-      inputData.push_back(trk.hitPattern().trackerLayersTotallyOffOrBad(reco::HitPattern::MISSING_INNER_HITS));
-      inputData.push_back(trk.hitPattern().trackerLayersTotallyOffOrBad(reco::HitPattern::MISSING_OUTER_HITS));
+      // inputData.push_back(trk.hitPattern().trackerLayersTotallyOffOrBad(reco::HitPattern::MISSING_INNER_HITS));
+      // inputData.push_back(trk.hitPattern().trackerLayersTotallyOffOrBad(reco::HitPattern::MISSING_OUTER_HITS));
       inputData.push_back(trk.hitPattern().trackerLayersWithoutMeasurement(reco::HitPattern::TRACK_HITS));
       inputData.push_back(trk.hitPattern().numberOfValidPixelHits());
       inputData.push_back(trk.hitPattern().numberOfValidStripHits());
+      passThrough.push_back(std::abs(trk.dxy(beamSpot.position()))>0.5);
     }
 
-    auto inputTensor = ::torch::from_blob(inputData.data(), {actual_batch_size, 29}, ::torch::kFloat32).to(device_);
+    auto inputTensor = ::torch::from_blob(inputData.data(), {actual_batch_size, 15}, ::torch::kFloat32).to(device_);
 
     std::vector<::torch::IValue> inputs;
     inputs.push_back(inputTensor);
@@ -166,7 +155,8 @@ void TrackTorchClassifier::produce(edm::Event& iEvent, const edm::EventSetup& iS
 
   int n_passed = 0;
   for (int itrack = 0; itrack < size_in; itrack++) {
-    if (output[itrack] >= minScore_) {
+    // if (output[itrack] >= minScore_ || (passThrough[itrack] && output[itrack] >= 0.267)) {
+    if (output[itrack] >= minScore_ || (passThrough[itrack] && output[itrack] >= 0.004)) {
       filteredTracks->push_back(tracks[itrack]);
       n_passed++;
     }
