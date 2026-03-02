@@ -57,31 +57,10 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
       for (size_t i = 0; i < nTracks; ++i) {
         const auto& track = tracks[i];
-        // const auto& innerMom = track.innerMomentum();
-        // const auto& outerMom = track.outerMomentum();
-
-        // features_view[i].pt() = track.pt();
-        // features_view[i].innerMomentumX() = innerMom.x();
-        // features_view[i].innerMomentumY() = innerMom.y();
-        // features_view[i].innerMomentumZ() = innerMom.z();
-        // features_view[i].innerMomentumRho() = innerMom.Rho();
-        // features_view[i].outerMomentumX() = outerMom.x();
-        // features_view[i].outerMomentumY() = outerMom.y();
-        // features_view[i].outerMomentumZ() = outerMom.z();
-        // features_view[i].outerMomentumRho() = outerMom.Rho();
-        // features_view[i].ptError() = track.ptError();
-
-        // if (bestVertex) {
-        //   features_view[i].dxyBestVertex() = track.dxy(bestVertex->position());
-        //   features_view[i].dzBestVertex() = track.dz(bestVertex->position());
-        // } else {
-        //   features_view[i].dxyBestVertex() = 0.0f;
-        //   features_view[i].dzBestVertex() = 0.0f;
-        // }
 
         features_view[i].dxyBeamSpot() = track.dxy(beamspot.position());
         features_view[i].dzBeamSpot() = track.dz(beamspot.position());
-        // features_view[i].dxyError() = track.dxyError();
+        features_view[i].dxyError() = track.dxyError();
         features_view[i].dzError() = track.dzError();
 
         features_view[i].normalizedChi2() = track.normalizedChi2();
@@ -94,8 +73,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         const auto& hitPattern = track.hitPattern();
         features_view[i].lostInnerHits() = hitPattern.numberOfLostTrackerHits(reco::HitPattern::MISSING_INNER_HITS);
         features_view[i].lostOuterHits() = hitPattern.numberOfLostTrackerHits(reco::HitPattern::MISSING_OUTER_HITS);
-        // features_view[i].layersOffInner() = hitPattern.trackerLayersTotallyOffOrBad(reco::HitPattern::MISSING_INNER_HITS);
-        // features_view[i].layersOffOuter() = hitPattern.trackerLayersTotallyOffOrBad(reco::HitPattern::MISSING_OUTER_HITS);
         features_view[i].layersWithoutMeas() = hitPattern.trackerLayersWithoutMeasurement(reco::HitPattern::TRACK_HITS);
         features_view[i].validPixelHits() = hitPattern.numberOfValidPixelHits();
         features_view[i].validStripHits() = hitPattern.numberOfValidStripHits();

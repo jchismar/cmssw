@@ -61,7 +61,7 @@ void TrackTorchClassifier::fillDescriptions(edm::ConfigurationDescriptions& desc
   desc.add<edm::InputTag>("beamspot", edm::InputTag("hltOnlineBeamSpot"));
   // desc.add<edm::InputTag>("vertices", edm::InputTag(""));
   // desc.add<bool>("ignoreVertices", true);
-  desc.add<std::string>("modelPath", "RecoTracker/FinalTrackSelectors/data/best_model_bce_14feat.pt");
+  desc.add<std::string>("modelPath", "RecoTracker/FinalTrackSelectors/data/best_model_focalLossNew.pt");
   desc.add<int>("batchSize", 16);
   desc.add<double>("minScore", 0.5)->setComment("Minimum DNN score to keep track (working point)");
   descriptions.addWithDefaultLabel(desc);
@@ -119,7 +119,7 @@ void TrackTorchClassifier::produce(edm::Event& iEvent, const edm::EventSetup& iS
 
       inputData.push_back(trk.dxy(beamSpot.position()));
       inputData.push_back(trk.dz(beamSpot.position()));
-      // inputData.push_back(trk.dxyError());
+      inputData.push_back(trk.dxyError());
       inputData.push_back(trk.dzError());
       inputData.push_back(trk.normalizedChi2());
       inputData.push_back(trk.eta());
@@ -129,8 +129,6 @@ void TrackTorchClassifier::produce(edm::Event& iEvent, const edm::EventSetup& iS
       inputData.push_back(trk.ndof());
       inputData.push_back(trk.hitPattern().numberOfLostTrackerHits(reco::HitPattern::MISSING_INNER_HITS));
       inputData.push_back(trk.hitPattern().numberOfLostTrackerHits(reco::HitPattern::MISSING_OUTER_HITS));
-      // inputData.push_back(trk.hitPattern().trackerLayersTotallyOffOrBad(reco::HitPattern::MISSING_INNER_HITS));
-      // inputData.push_back(trk.hitPattern().trackerLayersTotallyOffOrBad(reco::HitPattern::MISSING_OUTER_HITS));
       inputData.push_back(trk.hitPattern().trackerLayersWithoutMeasurement(reco::HitPattern::TRACK_HITS));
       inputData.push_back(trk.hitPattern().numberOfValidPixelHits());
       inputData.push_back(trk.hitPattern().numberOfValidStripHits());
@@ -155,8 +153,8 @@ void TrackTorchClassifier::produce(edm::Event& iEvent, const edm::EventSetup& iS
 
   int n_passed = 0;
   for (int itrack = 0; itrack < size_in; itrack++) {
-    // if (output[itrack] >= minScore_ || (passThrough[itrack] && output[itrack] >= 0.267)) {
-    if (output[itrack] >= minScore_ || (passThrough[itrack] && output[itrack] >= 0.004)) {
+    if (output[itrack] >= minScore_ || (passThrough[itrack] && output[itrack] >= 0.267)) {
+    // if (output[itrack] >= minScore_ || (passThrough[itrack] && output[itrack] >= 0.004)) {
       filteredTracks->push_back(tracks[itrack]);
       n_passed++;
     }

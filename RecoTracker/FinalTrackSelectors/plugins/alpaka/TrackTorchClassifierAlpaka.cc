@@ -27,7 +27,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
     static void fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
       edm::ParameterSetDescription desc;
-      desc.add<edm::FileInPath>("modelPath", edm::FileInPath("RecoTracker/FinalTrackSelectors/data/best_model_bce_14feat.pt"));
+      desc.add<edm::FileInPath>("modelPath", edm::FileInPath("RecoTracker/FinalTrackSelectors/data/best_model_focalLossNew.pt"));
       desc.add<edm::InputTag>("features", edm::InputTag("hltInitialStepTrackFeatureExtractor"));
       descriptions.addWithDefaultLabel(desc);
     }
@@ -43,21 +43,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
       cms::torch::alpakatools::TensorCollection<Queue> inputs(batch_size);
       inputs.add<TrackFeaturesSoA>("features",
-                                    // input_records.pt(),
-                                    // input_records.innerMomentumX(),
-                                    // input_records.innerMomentumY(),
-                                    // input_records.innerMomentumZ(),
-                                    // input_records.innerMomentumRho(),
-                                    // input_records.outerMomentumX(),
-                                    // input_records.outerMomentumY(),
-                                    // input_records.outerMomentumZ(),
-                                    // input_records.outerMomentumRho(),
-                                    // input_records.ptError(),
-                                    // input_records.dxyBestVertex(),
-                                    // input_records.dzBestVertex(),
                                     input_records.dxyBeamSpot(),
                                     input_records.dzBeamSpot(),
-                                    // input_records.dxyError(),
+                                    input_records.dxyError(),
                                     input_records.dzError(),
                                     input_records.normalizedChi2(),
                                     input_records.eta(),
@@ -67,8 +55,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                     input_records.ndof(),
                                     input_records.lostInnerHits(),
                                     input_records.lostOuterHits(),
-                                    // input_records.layersOffInner(),
-                                    // input_records.layersOffOuter(),
                                     input_records.layersWithoutMeas(),
                                     input_records.validPixelHits(),
                                     input_records.validStripHits());
