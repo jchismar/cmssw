@@ -154,7 +154,6 @@ void TrackTorchClassifier::produce(edm::Event& iEvent, const edm::EventSetup& iS
   int n_passed = 0;
   for (int itrack = 0; itrack < size_in; itrack++) {
     if (output[itrack] >= minScore_ || (passThrough[itrack] && output[itrack] >= 0.267)) {
-    // if (output[itrack] >= minScore_ || (passThrough[itrack] && output[itrack] >= 0.004)) {
       filteredTracks->push_back(tracks[itrack]);
       n_passed++;
     }
