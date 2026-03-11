@@ -13,9 +13,6 @@ HLTInitialStepSequence = cms.Sequence(hltInitialStepSeeds+
                                       hltInitialStepTrackCandidates+
                                       hltInitialStepTracks+
                                       hltInitialStepTrackFeatureExtractor+
-                                      hltInitialStepTrackTorchClassifier+
-                                      hltInitialStepTrackTorchClassifierOutput+
-                                      hltInitialStepTrackCutClassifier+
                                       hltInitialStepTrackSelectionHighPurity)
 
 from ..modules.hltInitialStepSeedTracksLST_cfi import *
@@ -34,9 +31,6 @@ _HLTInitialStepSequenceLST = cms.Sequence(
     +hltLST
     +hltInitialStepTrackCandidates
     +hltInitialStepTracks
-    +hltInitialStepTrackFeatureExtractor
-    +hltInitialStepTrackTorchClassifier
-    +hltInitialStepTrackTorchClassifierOutput
     +hltInitialStepTrackCutClassifier
     +hltInitialStepTrackSelectionHighPurity
 )
@@ -59,9 +53,6 @@ _HLTInitialStepSequenceSingleIterPatatrackLSTSeeding = cms.Sequence(
     +hltInitialStepTrajectorySeedsLST
     +hltInitialStepTrackCandidates
     +hltInitialStepTracks
-    +hltInitialStepTrackFeatureExtractor
-    +hltInitialStepTrackTorchClassifier
-    +hltInitialStepTrackTorchClassifierOutput
     +hltInitialStepTrackCutClassifier
     +hltInitialStepTrackSelectionHighPurity
 )
@@ -93,9 +84,6 @@ _HLTInitialStepSequenceMkFitTracking = cms.Sequence(
     +hltInitialStepTrackCandidatesMkFit
     +hltInitialStepTrackCandidates
     +hltInitialStepTracks
-    +hltInitialStepTrackFeatureExtractor
-    +hltInitialStepTrackTorchClassifier
-    +hltInitialStepTrackTorchClassifierOutput
     +hltInitialStepTrackCutClassifier
     +hltInitialStepTrackSelectionHighPurity
 )
@@ -115,9 +103,6 @@ _HLTInitialStepSequenceSingleIterPatatrackLSTSeedingMkFitTracking = cms.Sequence
     +hltInitialStepTrackCandidatesMkFit
     +hltInitialStepTrackCandidates
     +hltInitialStepTracks
-    +hltInitialStepTrackFeatureExtractor
-    +hltInitialStepTrackTorchClassifier
-    +hltInitialStepTrackTorchClassifierOutput
     +hltInitialStepTrackCutClassifier
     +hltInitialStepTrackSelectionHighPurity
 )
@@ -134,6 +119,42 @@ _HLTInitialStepSequenceMkFitFitTracking = cms.Sequence(
     +hltInitialStepTrackCandidatesMkFit
     +hltInitialStepTrackCandidatesMkFitFit
     +hltInitialStepTracks
+    +hltInitialStepTrackCutClassifier
+    +hltInitialStepTrackSelectionHighPurity
+)
+
+_HLTInitialStepSequenceSingleIterPatatrackLSTSeedingMkFitFitTracking = cms.Sequence(
+     hltInitialStepSeeds
+    +hltInitialStepSeedTracksLST
+    +hltSiPhase2RecHits # Probably need to move elsewhere in the final setup
+    +hltInputLST
+    +hltLST
+    +hltInitialStepTrajectorySeedsLST
+    +HLTMkFitInputSequence
+    +hltInitialStepMkFitSeeds
+    +hltInitialStepTrackCandidatesMkFit
+    +hltInitialStepTrackCandidatesMkFitFit
+    +hltInitialStepTracks
+    +hltInitialStepTrackCutClassifier
+    +hltInitialStepTrackSelectionHighPurity
+)
+
+from Configuration.ProcessModifiers.trackingMkFitFit_cff import trackingMkFitFit
+(~seedingLST & ~trackingLST & hltTrackingMkFitInitialStep & trackingMkFitFit).toReplaceWith(HLTInitialStepSequence,_HLTInitialStepSequenceMkFitFitTracking)
+(singleIterPatatrack & trackingLST & seedingLST & hltTrackingMkFitInitialStep & trackingMkFitFit).toReplaceWith(HLTInitialStepSequence, _HLTInitialStepSequenceSingleIterPatatrackLSTSeedingMkFitFitTracking)
+
+_HLTInitialStepSequenceSingleIterPatatrackLSTSeedingMkFitTrackingTrackTorchClassifier = cms.Sequence(
+     hltInitialStepSeeds
+    +hltInitialStepSeedTracksLST
+    +hltSiPhase2RecHits # Probably need to move elsewhere in the final setup                                                 
+    +hltInputLST
+    +hltLST
+    +hltInitialStepTrajectorySeedsLST
+    +HLTMkFitInputSequence
+    +hltInitialStepMkFitSeeds
+    +hltInitialStepTrackCandidatesMkFit
+    +hltInitialStepTrackCandidates
+    +hltInitialStepTracks
     +hltInitialStepTrackFeatureExtractor
     +hltInitialStepTrackTorchClassifier
     +hltInitialStepTrackTorchClassifierOutput
@@ -141,7 +162,7 @@ _HLTInitialStepSequenceMkFitFitTracking = cms.Sequence(
     +hltInitialStepTrackSelectionHighPurity
 )
 
-_HLTInitialStepSequenceSingleIterPatatrackLSTSeedingMkFitFitTracking = cms.Sequence(
+_HLTInitialStepSequenceSingleIterPatatrackLSTSeedingMkFitFitTrackingTrackTorchClassifier = cms.Sequence(
      hltInitialStepSeeds
     +hltInitialStepSeedTracksLST
     +hltSiPhase2RecHits # Probably need to move elsewhere in the final setup
@@ -159,7 +180,6 @@ _HLTInitialStepSequenceSingleIterPatatrackLSTSeedingMkFitFitTracking = cms.Seque
     +hltInitialStepTrackCutClassifier
     +hltInitialStepTrackSelectionHighPurity
 )
-
-from Configuration.ProcessModifiers.trackingMkFitFit_cff import trackingMkFitFit
-(~seedingLST & ~trackingLST & hltTrackingMkFitInitialStep & trackingMkFitFit).toReplaceWith(HLTInitialStepSequence,_HLTInitialStepSequenceMkFitFitTracking)
-(singleIterPatatrack & trackingLST & seedingLST & hltTrackingMkFitInitialStep & trackingMkFitFit).toReplaceWith(HLTInitialStepSequence, _HLTInitialStepSequenceSingleIterPatatrackLSTSeedingMkFitFitTracking)
+from Configuration.ProcessModifiers.trackTorchClassifier_cff import trackTorchClassifier
+(singleIterPatatrack & trackingLST & seedingLST & hltTrackingMkFitInitialStep & trackTorchClassifier).toReplaceWith(HLTInitialStepSequence, _HLTInitialStepSequenceSingleIterPatatrackLSTSeedingMkFitTrackingTrackTorchClassifier) 
+(singleIterPatatrack & trackingLST & seedingLST & hltTrackingMkFitInitialStep & trackingMkFitFit & trackTorchClassifier).toReplaceWith(HLTInitialStepSequence, _HLTInitialStepSequenceSingleIterPatatrackLSTSeedingMkFitFitTrackingTrackTorchClassifier) 
