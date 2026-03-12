@@ -36,7 +36,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
       const auto& features = iEvent.get(features_token_);
       const auto batch_size = features.const_view().metadata().size();
       
-      auto scores_device = TrackScoresDeviceCollection(batch_size, iEvent.queue());
+      auto scores_device = TrackScoresDeviceCollection(iEvent.queue(), batch_size);
 
       auto input_records = features.const_view().records();
       auto output_records = scores_device.view().records();

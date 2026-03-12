@@ -102,7 +102,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
       }
 
       // Create device collection and copy from host
-      TrackFeaturesDeviceCollection features_device(nTracks, iEvent.queue());
+      TrackFeaturesDeviceCollection features_device(iEvent.queue(), nTracks);
       alpaka::memcpy(iEvent.queue(), features_device.buffer(), features_host.const_buffer());
       
       iEvent.emplace(features_token_, std::move(features_device));
