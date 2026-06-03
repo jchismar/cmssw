@@ -171,6 +171,7 @@ fragment.load("HLTrigger/Configuration/HLT_75e33/psets/pSetPvClusterComparerForI
 fragment.load("HLTrigger/Configuration/HLT_75e33/psets/seedFromProtoTracks_cfi")
 fragment.load("HLTrigger/Configuration/HLT_75e33/psets/SiStripClusterChargeCutLoose_cfi")
 fragment.load("HLTrigger/Configuration/HLT_75e33/psets/SiStripClusterChargeCutNone_cfi")
+fragment.load("HLTrigger/Configuration/HLT_75e33/services/PyTorchService_cfi")
 
 fragment.load("HLTrigger/Configuration/HLT_75e33/sequences/HLTCalolocalrecoSequence_cfi")
 fragment.load("HLTrigger/Configuration/HLT_75e33/sequences/HLTCaloTowersRecSequence_cfi")
