@@ -171,7 +171,6 @@ fragment.load("HLTrigger/Configuration/HLT_75e33/psets/pSetPvClusterComparerForI
 fragment.load("HLTrigger/Configuration/HLT_75e33/psets/seedFromProtoTracks_cfi")
 fragment.load("HLTrigger/Configuration/HLT_75e33/psets/SiStripClusterChargeCutLoose_cfi")
 fragment.load("HLTrigger/Configuration/HLT_75e33/psets/SiStripClusterChargeCutNone_cfi")
-fragment.load("HLTrigger/Configuration/HLT_75e33/services/PyTorchService_cfi")
 
 fragment.load("HLTrigger/Configuration/HLT_75e33/sequences/HLTCalolocalrecoSequence_cfi")
 fragment.load("HLTrigger/Configuration/HLT_75e33/sequences/HLTCaloTowersRecSequence_cfi")
@@ -274,6 +273,7 @@ fragment.load("HLTrigger/Configuration/HLT_75e33/services/DQMStore_cfi")
 fragment.load("HLTrigger/Configuration/HLT_75e33/services/FastTimerService_cfi")
 fragment.load("HLTrigger/Configuration/HLT_75e33/services/MessageLogger_cfi")
 fragment.load("HLTrigger/Configuration/HLT_75e33/services/ThroughputService_cfi")
+fragment.load("HLTrigger/Configuration/HLT_75e33/services/PyTorchService_cfi")
 
 fragment.schedule = cms.Schedule(*[
 
